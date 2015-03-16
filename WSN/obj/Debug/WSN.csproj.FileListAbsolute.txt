@@ -1,1 +1,0 @@
-c:\users\kamyk\documents\visual studio 2012\Projects\WSN\WSN\bin\Debug\WSN.exe.config
