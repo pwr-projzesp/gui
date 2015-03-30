@@ -22,6 +22,8 @@ namespace graf
         Image nodeStation = Image.FromFile("node.png");         // grafika stacji roboczej
         Font font = new Font("Arial", 8);                       // typ oraz rozmiar czcionki uzywanej do podpisywania elementow na rysunku
         SolidBrush brush = new SolidBrush(Color.Black);         // kolor pedzla sluzacego do rysowania polaczen miedzy urzedzeniami
+        string info;
+
 
         private bool isDragging = false;                        // zmienna sluzaca do przechowywania informacji czy aktualnie jakis obraz jest przenoszony
         private int xPos, yPos;                         // zmienne sluzace do przechowywania aktualnego polozenia
@@ -57,6 +59,7 @@ namespace graf
             });
             picture.MouseDown += new MouseEventHandler(picture_MouseDown);
             picture.MouseMove += new MouseEventHandler(picture_MouseMove);
+            picture.MouseUp += new MouseEventHandler(picture_MouseUp);
             picture.Cursor = Cursors.Hand;
             Controls.Add(picture);
             pictureBoxes.Add(picture);
@@ -92,10 +95,16 @@ namespace graf
             });
             picture.MouseDoubleClick += new MouseEventHandler((sender, e) => 
             {
-                MessageBox.Show("Info", nazwa);           
+                Point loca = nodes[ID].getLoc();
+                List<int> nb = nodes[ID].getConnDev();
+                string nbhood = string.Join(", ", nb);
+
+                info = "ID: " + ID + " \nPicBox Loc: " + pictureBoxes[ID].Location.X + " " + pictureBoxes[ID].Location.Y + " \nNode Loc: " + loca.X + " " + loca.Y + " \nNeighbours: " + nbhood;
+                MessageBox.Show(info, nazwa);           
             });
             picture.MouseDown += new MouseEventHandler(picture_MouseDown);
             picture.MouseMove += new MouseEventHandler(picture_MouseMove);
+            picture.MouseUp += new MouseEventHandler(picture_MouseUp);
             picture.Cursor = Cursors.Hand;
             Controls.Add(picture);
             pictureBoxes.Add(picture);
@@ -132,6 +141,7 @@ namespace graf
                 }
             }
             index = nodes.Count;
+            copyLocation();
 
         }
 
@@ -160,16 +170,30 @@ namespace graf
             }
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void picture_MouseUp(object sender, MouseEventArgs e)
+        {
+            copyLocation();
+        }
+
+        private void copyLocation()
         {
             for (int i = 0; i < nodes.Count(); i++)
             {
                 nodes[i].setLoc(pictureBoxes[i].Location);
+            }
+        }
+        
+        private void button3_Click(object sender, EventArgs e)
+        {
+            for (int i = 0; i < nodes.Count(); i++)
+            {
                 nodes[i].clearConnDev();
             }
+
             Connections();
             for (int i = 0; i < nodes.Count; i++)
             {
+
                 Point begin = nodes[i].getLoc();
                 begin.X += pictureBoxes[i].Width / 2;
                 begin.Y += pictureBoxes[i].Height / 2;
