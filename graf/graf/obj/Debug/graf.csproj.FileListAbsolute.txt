@@ -37,3 +37,6 @@ C:\Users\Bartek\Desktop\graf\graf\obj\Debug\graf.csproj.GenerateResource.Cache
 D:\Dysk Google\VI semestr\Projekt Zespołowy\graf\graf\bin\Debug\graf.exe.config
 D:\Dysk Google\VI semestr\Projekt Zespołowy\graf\graf\obj\Debug\graf.exe
 D:\Dysk Google\VI semestr\Projekt Zespołowy\graf\graf\obj\Debug\graf.pdb
+D:\Dysk Google\VI semestr\Projekt Zespołowy\gui\graf\graf\bin\Debug\graf.exe.config
+D:\Dysk Google\VI semestr\Projekt Zespołowy\gui\graf\graf\obj\Debug\graf.exe
+D:\Dysk Google\VI semestr\Projekt Zespołowy\gui\graf\graf\obj\Debug\graf.pdb
