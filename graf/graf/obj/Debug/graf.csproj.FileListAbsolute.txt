@@ -16,3 +16,24 @@ C:\Users\KamyK\Documents\Visual Studio 2012\Projects\graf\graf\obj\Debug\graf.cs
 C:\Users\KamyK\Documents\Visual Studio 2012\Projects\graf\graf\obj\Debug\graf.Form1.resources
 C:\Users\KamyK\Documents\Visual Studio 2012\Projects\graf\graf\obj\Debug\graf.Properties.Resources.resources
 C:\Users\KamyK\Documents\Visual Studio 2012\Projects\graf\graf\obj\Debug\graf.csproj.GenerateResource.Cache
+G:\graf\graf\bin\Debug\graf.exe.config
+G:\graf\graf\obj\Debug\graf.exe
+G:\graf\graf\obj\Debug\graf.pdb
+G:\graf\graf\bin\Debug\graf.exe
+G:\graf\graf\bin\Debug\graf.pdb
+G:\graf\graf\obj\Debug\graf.csprojResolveAssemblyReference.cache
+G:\graf\graf\obj\Debug\graf.Form1.resources
+G:\graf\graf\obj\Debug\graf.Properties.Resources.resources
+G:\graf\graf\obj\Debug\graf.csproj.GenerateResource.Cache
+C:\Users\Bartek\Desktop\graf\graf\bin\Debug\graf.exe.config
+C:\Users\Bartek\Desktop\graf\graf\obj\Debug\graf.exe
+C:\Users\Bartek\Desktop\graf\graf\obj\Debug\graf.pdb
+C:\Users\Bartek\Desktop\graf\graf\bin\Debug\graf.exe
+C:\Users\Bartek\Desktop\graf\graf\bin\Debug\graf.pdb
+C:\Users\Bartek\Desktop\graf\graf\obj\Debug\graf.csprojResolveAssemblyReference.cache
+C:\Users\Bartek\Desktop\graf\graf\obj\Debug\graf.Form1.resources
+C:\Users\Bartek\Desktop\graf\graf\obj\Debug\graf.Properties.Resources.resources
+C:\Users\Bartek\Desktop\graf\graf\obj\Debug\graf.csproj.GenerateResource.Cache
+D:\Dysk Google\VI semestr\Projekt Zespołowy\graf\graf\bin\Debug\graf.exe.config
+D:\Dysk Google\VI semestr\Projekt Zespołowy\graf\graf\obj\Debug\graf.exe
+D:\Dysk Google\VI semestr\Projekt Zespołowy\graf\graf\obj\Debug\graf.pdb

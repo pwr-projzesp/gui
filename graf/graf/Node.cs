@@ -13,6 +13,7 @@ namespace graf
         private int ID;                                     // zmienna przechowujaca ID urzadzenia
         private Point loc = new Point();                    // zmienna przechowujaca polozenie urzadzenia
         private List<int> connDev = new List<int>();        // kolekcja przechowujaca ID urzadzen, z ktorymi dane urzadzenie ma polaczenie     
+        private bool isconnected = false;                     // zmienna przechowująca informację o tym, czy dane urządzenie ma połączenie ze stacją bazową
 
 
 // Constructors
@@ -32,6 +33,7 @@ namespace graf
             this.ID = ID;
             this.loc = loc;
             this.isBase = isBase;
+            this.isconnected = isBase;
         }
         public Node(int ID, Point loc, bool isBase, int[] connDev)
         {
@@ -58,6 +60,10 @@ namespace graf
         {
             return connDev;
         }
+        public bool getisconnected()
+        {
+            return isconnected;
+        }
 
 // Setters
         public void setType(bool isBase)
@@ -76,6 +82,10 @@ namespace graf
         {
             for (int i = 0; i < connDev.Length; i++)
                 this.connDev.Add(connDev[i]);
+        }
+        public void setisconnected(bool con)
+        {
+            this.isconnected = con;
         }
 
     }
