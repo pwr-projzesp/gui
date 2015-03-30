@@ -162,48 +162,54 @@ namespace graf
 
         private void button3_Click(object sender, EventArgs e)
         {
+            for (int i = 0; i < nodes.Count(); i++)
+            {
+                nodes[i].setLoc(pictureBoxes[i].Location);
+                nodes[i].clearConnDev();
+            }
             Connections();
             for (int i = 0; i < nodes.Count; i++)
             {
+                Point begin = nodes[i].getLoc();
+                begin.X += pictureBoxes[i].Width / 2;
+                begin.Y += pictureBoxes[i].Height / 2;
                 List<int> neighbours = nodes[i].getConnDev();
                 for (int j = 0; j < neighbours.Count; j++)
                 {
-                    Point begin = new Point();
-                    Point end = new Point();
-                    begin.X = pictureBoxes[j].Location.X + pictureBoxes[j].Width / 2;
-                    begin.Y = pictureBoxes[j].Location.Y + pictureBoxes[j].Height / 2;
-                    end.X = pictureBoxes[i].Location.X + pictureBoxes[i].Width / 2;
-                    end.Y = pictureBoxes[i].Location.Y + pictureBoxes[i].Height / 2;
+                    Point end = nodes[j].getLoc();
+                    end.X += pictureBoxes[j].Width / 2;
+                    end.Y += pictureBoxes[j].Height / 2;
                     this.CreateGraphics().DrawLine(new Pen(Brushes.Green, 2), begin,end);
                 }
             }
         }
-        private int getlenght(Point start, Point end)
+
+        private int getLenght(Point start, Point end)
         { 
             double lenght;
             lenght = Math.Sqrt(Math.Pow((end.Y - start.Y), 2) + Math.Pow((end.X - start.X), 2));
             return (int)lenght;
         }
+
         private void Connections()
         {
-            int len;
             maxlenght = (int)numericUpDown3.Value;
-            for (int i = 0; i < nodes.Count; i++)
-            {    
-                List<Node> neighbours = new List<Node>();
-                for (int j = 0; j < nodes.Count; j++)
+
+            for (int i = 0; i < nodes.Count(); i++)
+            {
+                List<int> neighbours = new List<int>();
+                for (int j = 0; j < nodes.Count(); j++)
                 {
-                    len = getlenght(nodes[i].getLoc(), nodes[j].getLoc());
-                    if (len < maxlenght && !nodes[j].getisconnected())
+                    if (nodes[i].getID() != nodes[j].getID())
                     {
-                        neighbours.Add(nodes[j]);
-                        nodes[j].setisconnected(true);
+                        int len = getLenght(nodes[i].getLoc(), nodes[j].getLoc());
+                        if (len < maxlenght)
+                        {
+                            neighbours.Add(nodes[j].getID());
+                        }
                     }
                 }
-                int []tab = new int [neighbours.Count];
-                for(int k=0;k<neighbours.Count;k++)
-                    tab[k]=neighbours[k].getID();
-                nodes[i].setConnDev(tab);
+                nodes[i].setConnDev(neighbours);
             }
         }
 
