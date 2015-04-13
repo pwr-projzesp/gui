@@ -46,19 +46,37 @@ namespace graf
             String nazwa = "Base";
             nazwa += ID;
             picture = new PictureBox();
-            //picture.SizeMode = PictureBoxSizeMode.StretchImage;
             picture.Location = new System.Drawing.Point(loc.X, loc.Y);
             picture.Image = new Bitmap("base.png");
             picture.Size = picture.Image.Size;
+
             picture.Paint += new PaintEventHandler((sender, e) =>
             {
                 e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
                 e.Graphics.DrawString(nazwa, Font, Brushes.Black, 0, 0);
             });
+
+            picture.MouseClick += new MouseEventHandler((sender, e) =>
+            {
+                if (e.Button == System.Windows.Forms.MouseButtons.Right)
+                {
+                    int range = (int)numericUpDown3.Value;
+                    this.CreateGraphics().DrawEllipse(new Pen(Brushes.Green, 2), pictureBoxes[ID].Location.X - range, pictureBoxes[ID].Location.Y - range, 2 * range, 2 * range);
+
+                }
+            });
+
             picture.MouseDoubleClick += new MouseEventHandler((sender, e) =>
             {
-                MessageBox.Show("Info", nazwa);
+                Point loca = nodes[ID].getLoc();
+                List<int> nb = nodes[ID].getConnDev();
+                string nbhood = string.Join(", ", nb);
+
+                info = "ID: " + ID + " \nPolozenie: " + pictureBoxes[ID].Location.X + " " + pictureBoxes[ID].Location.Y + " \nSasiedzi: " + nbhood;
+                MessageBox.Show(info, nazwa);
             });
+
+            //this.CreateGraphics().DrawEllipse(new Pen(Brushes.Black, 2), pictureBoxes[ID].Location.X, pictureBoxes[ID].Location.Y, 5, 5);
             picture.MouseDown += new MouseEventHandler(picture_MouseDown);
             picture.MouseMove += new MouseEventHandler(picture_MouseMove);
             picture.MouseUp += new MouseEventHandler(picture_MouseUp);
@@ -95,6 +113,7 @@ namespace graf
             picture.Location = new System.Drawing.Point(loc.X, loc.Y);
             picture.Image = new Bitmap("node.png");
             picture.Size = picture.Image.Size;
+
             picture.Paint += new PaintEventHandler((sender, e) =>
             {
                 e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
@@ -120,6 +139,7 @@ namespace graf
                 info = "ID: " + ID + " \nPolozenie: " + pictureBoxes[ID].Location.X + " " + pictureBoxes[ID].Location.Y + " \nSasiedzi: " + nbhood;
                 MessageBox.Show(info, nazwa);           
             });
+
             picture.MouseDown += new MouseEventHandler(picture_MouseDown);
             picture.MouseMove += new MouseEventHandler(picture_MouseMove);
             picture.MouseUp += new MouseEventHandler(picture_MouseUp);
