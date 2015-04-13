@@ -137,7 +137,7 @@
             // button3
             // 
             this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button3.Location = new System.Drawing.Point(621, 125);
+            this.button3.Location = new System.Drawing.Point(621, 311);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(103, 37);
             this.button3.TabIndex = 8;
@@ -148,7 +148,7 @@
             // numericUpDown3
             // 
             this.numericUpDown3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.numericUpDown3.Location = new System.Drawing.Point(654, 169);
+            this.numericUpDown3.Location = new System.Drawing.Point(654, 285);
             this.numericUpDown3.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -163,7 +163,7 @@
             // 
             this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(609, 171);
+            this.label4.Location = new System.Drawing.Point(609, 287);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(39, 13);
             this.label4.TabIndex = 10;

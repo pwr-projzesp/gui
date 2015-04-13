@@ -13,7 +13,7 @@ namespace graf
         private int ID;                                     // zmienna przechowujaca ID urzadzenia
         private Point loc = new Point();                    // zmienna przechowujaca polozenie urzadzenia
         private List<int> connDev = new List<int>();        // kolekcja przechowujaca ID urzadzen, z ktorymi dane urzadzenie ma polaczenie     
-       // private bool isconnected = false;                   // zmienna przechowująca informację o tym, czy dane urządzenie ma połączenie ze stacją bazową
+       
 
 
 // Constructors

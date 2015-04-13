@@ -23,9 +23,13 @@ namespace graf
         Font font = new Font("Arial", 8);                       // typ oraz rozmiar czcionki uzywanej do podpisywania elementow na rysunku
         SolidBrush brush = new SolidBrush(Color.Black);         // kolor pedzla sluzacego do rysowania polaczen miedzy urzedzeniami
         string info;
+        enum brushColor{
+            black = 0,
+            green = 1,
+            yellow = 2,
+            red = 3
+        };
 
-
-        private bool isDragging = false;                        // zmienna sluzaca do przechowywania informacji czy aktualnie jakis obraz jest przenoszony
         private int xPos, yPos;                         // zmienne sluzace do przechowywania aktualnego polozenia
         private PictureBox picture;
         private List<PictureBox> pictureBoxes = new List<PictureBox>();
@@ -39,8 +43,6 @@ namespace graf
         // Metoda sluzaca do narysowania na ekranie pojedynczej stacji bazowej
         private void drawBase(Point loc, int ID)
         {
-            //this.CreateGraphics().DrawImage(baseStation, loc.X, loc.Y);
-            //this.CreateGraphics().DrawString(ID + " Base", font, brush, loc.X+10, loc.Y+baseStation.Height-20);
             String nazwa = "Base";
             nazwa += ID;
             picture = new PictureBox();
@@ -66,7 +68,7 @@ namespace graf
         }
         
         // Metoda sluzaca do narysowania na ekranie pojedynczej polaczenia miedzy urzadzeniami
-        private void drawLine(Point startloc, Point endloc)
+        private void drawLine(Point startloc, Point endloc, char color)
         {
             startloc.X = startloc.X + baseStation.Width / 2;
             startloc.Y = startloc.Y + baseStation.Height / 2;
@@ -74,14 +76,19 @@ namespace graf
             endloc.X = endloc.X + nodeStation.Width / 2;
             endloc.Y = endloc.Y + nodeStation.Height / 2;
 
-            this.CreateGraphics().DrawLine(new Pen(Brushes.Black, 3), startloc, endloc);
+            if (color == 'b')
+                this.CreateGraphics().DrawLine(new Pen(Brushes.Black, 3), startloc, endloc);
+            else if (color == 'g')
+                this.CreateGraphics().DrawLine(new Pen(Brushes.Green, 3), startloc, endloc);
+            else if (color == 'y')
+                this.CreateGraphics().DrawLine(new Pen(Brushes.Yellow, 3), startloc, endloc);
+            else if (color == 'r')
+                this.CreateGraphics().DrawLine(new Pen(Brushes.Red, 3), startloc, endloc);
         }
 
         // Metoda sluzaca do narysowania na ekranie pojedynczej stacji roboczej
         private void drawNode(Point loc, int ID)
         {
-            // this.CreateGraphics().DrawImage(nodeStation, loc.X, loc.Y);
-            // this.CreateGraphics().DrawString(ID + " Node", font, brush, loc.X+5, loc.Y+nodeStation.Height-20);
             String nazwa = "Node";
             nazwa += ID;
             picture = new PictureBox();
@@ -93,13 +100,24 @@ namespace graf
                 e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
                 e.Graphics.DrawString(nazwa, Font, Brushes.Black, 0, 0);
             });
+
+            picture.MouseClick += new MouseEventHandler((sender, e) =>
+            {
+                if (e.Button == System.Windows.Forms.MouseButtons.Right) 
+                { 
+                    int range = (int)numericUpDown3.Value;
+                    this.CreateGraphics().DrawEllipse(new Pen(Brushes.Green, 2), pictureBoxes[ID].Location.X - range, pictureBoxes[ID].Location.Y - range, 2 * range, 2 * range);
+                
+                }
+            });
+ 
             picture.MouseDoubleClick += new MouseEventHandler((sender, e) => 
             {
                 Point loca = nodes[ID].getLoc();
                 List<int> nb = nodes[ID].getConnDev();
                 string nbhood = string.Join(", ", nb);
 
-                info = "ID: " + ID + " \nPicBox Loc: " + pictureBoxes[ID].Location.X + " " + pictureBoxes[ID].Location.Y + " \nNode Loc: " + loca.X + " " + loca.Y + " \nNeighbours: " + nbhood;
+                info = "ID: " + ID + " \nPolozenie: " + pictureBoxes[ID].Location.X + " " + pictureBoxes[ID].Location.Y + " \nSasiedzi: " + nbhood;
                 MessageBox.Show(info, nazwa);           
             });
             picture.MouseDown += new MouseEventHandler(picture_MouseDown);
@@ -142,7 +160,7 @@ namespace graf
             }
             index = nodes.Count;
             copyLocation();
-
+            connections();
         }
 
 
@@ -173,6 +191,7 @@ namespace graf
         private void picture_MouseUp(object sender, MouseEventArgs e)
         {
             copyLocation();
+            connections();
         }
 
         private void copyLocation()
@@ -185,25 +204,17 @@ namespace graf
         
         private void button3_Click(object sender, EventArgs e)
         {
-            for (int i = 0; i < nodes.Count(); i++)
-            {
-                nodes[i].clearConnDev();
-            }
+            connections();
 
-            Connections();
             for (int i = 0; i < nodes.Count; i++)
             {
-
                 Point begin = nodes[i].getLoc();
-                begin.X += pictureBoxes[i].Width / 2;
-                begin.Y += pictureBoxes[i].Height / 2;
                 List<int> neighbours = nodes[i].getConnDev();
+
                 for (int j = 0; j < neighbours.Count; j++)
                 {
-                    Point end = nodes[j].getLoc();
-                    end.X += pictureBoxes[j].Width / 2;
-                    end.Y += pictureBoxes[j].Height / 2;
-                    this.CreateGraphics().DrawLine(new Pen(Brushes.Green, 2), begin,end);
+                    Point end = nodes[neighbours[j]].getLoc();
+                    drawLine(begin, end, 'b');
                 }
             }
         }
@@ -215,8 +226,13 @@ namespace graf
             return (int)lenght;
         }
 
-        private void Connections()
+        private void connections()
         {
+            for (int i = 0; i < nodes.Count(); i++)
+            {
+                nodes[i].clearConnDev();
+            }
+
             maxlenght = (int)numericUpDown3.Value;
 
             for (int i = 0; i < nodes.Count(); i++)
