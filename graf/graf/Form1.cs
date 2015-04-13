@@ -37,7 +37,7 @@ namespace graf
         // Metoda sluzaca do narysowania na ekranie pojedynczej stacji bazowej
         private void drawBase(Point loc, int ID)
         {
-            String nazwa = "Base";
+            String nazwa = "    Base";
             nazwa += ID;
             picture = new PictureBox();
             picture.Location = new System.Drawing.Point(loc.X, loc.Y);
@@ -70,7 +70,6 @@ namespace graf
                 MessageBox.Show(info, nazwa);
             });
 
-            //this.CreateGraphics().DrawEllipse(new Pen(Brushes.Black, 2), pictureBoxes[ID].Location.X, pictureBoxes[ID].Location.Y, 5, 5);
             picture.MouseDown += new MouseEventHandler(picture_MouseDown);
             picture.MouseMove += new MouseEventHandler(picture_MouseMove);
             picture.MouseUp += new MouseEventHandler(picture_MouseUp);
@@ -101,7 +100,7 @@ namespace graf
         // Metoda sluzaca do narysowania na ekranie pojedynczej stacji roboczej
         private void drawNode(Point loc, int ID)
         {
-            String nazwa = "Node";
+            String nazwa = "    Node";
             nazwa += ID;
             picture = new PictureBox();
             picture.Location = new System.Drawing.Point(loc.X, loc.Y);
@@ -119,8 +118,9 @@ namespace graf
                 if (e.Button == System.Windows.Forms.MouseButtons.Right) 
                 { 
                     int range = (int)numericUpDown3.Value;
-                    this.CreateGraphics().DrawEllipse(new Pen(Brushes.Green, 2), pictureBoxes[ID].Location.X - range, pictureBoxes[ID].Location.Y - range, 2 * range, 2 * range);
                     drawConn(ID);
+                    this.CreateGraphics().DrawEllipse(new Pen(Brushes.Green, 2), pictureBoxes[ID].Location.X - range, pictureBoxes[ID].Location.Y - range, 2 * range, 2 * range);
+                    
                 }
             });
  
