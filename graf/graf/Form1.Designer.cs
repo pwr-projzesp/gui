@@ -159,6 +159,7 @@
             this.numericUpDown3.Size = new System.Drawing.Size(70, 20);
             this.numericUpDown3.TabIndex = 9;
             this.numericUpDown3.Tag = "Max";
+            this.numericUpDown3.ValueChanged += new System.EventHandler(this.numericUpDown3_ValueChanged);
             // 
             // label4
             // 

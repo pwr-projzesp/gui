@@ -12,27 +12,18 @@ namespace graf
 {
     public partial class Form1 : Form
     {
-        int count = 0;
-        int index=0;
-        int maxlenght = 0;  
+        int range = 0;  
         Point loc = new Point();                                // zmienna sluzaca do przechowywania polozenia ( (0;0) - gorny prawy rog okna aplikacji)
         List<Node> nodes = new List<Node>();                    // kolekcja zawierajace wszystkie urzadzenia
 
-        Image baseStation = Image.FromFile("base.png");         // grafika stacji bazowej
-        Image nodeStation = Image.FromFile("node.png");         // grafika stacji roboczej
-        Font font = new Font("Arial", 8);                       // typ oraz rozmiar czcionki uzywanej do podpisywania elementow na rysunku
-        SolidBrush brush = new SolidBrush(Color.Black);         // kolor pedzla sluzacego do rysowania polaczen miedzy urzedzeniami
-        string info;
-
-        private int xPos, yPos;                                 // zmienne sluzace do przechowywania aktualnego polozenia
         private PictureBox picture;
         private List<PictureBox> pictureBoxes = new List<PictureBox>();
 
-        public Form1()
-        {
-            WindowState = FormWindowState.Maximized;
-            InitializeComponent();          
-        }
+
+// Funckje rysujące
+// --------------------------------------------------------------------------------------------------
+
+        string info;
 
         // Metoda sluzaca do narysowania na ekranie pojedynczej stacji bazowej
         private void drawBase(Point loc, int ID)
@@ -54,8 +45,7 @@ namespace graf
             {
                 if (e.Button == System.Windows.Forms.MouseButtons.Right)
                 {
-                    int range = (int)numericUpDown3.Value;
-                    this.CreateGraphics().DrawEllipse(new Pen(Brushes.Green, 2), pictureBoxes[ID].Location.X - range, pictureBoxes[ID].Location.Y - range, 2 * range, 2 * range);
+                    drawRange(ID);
                     drawConn(ID);
                 }
             });
@@ -81,6 +71,9 @@ namespace graf
         // Metoda sluzaca do narysowania na ekranie pojedynczej polaczenia miedzy urzadzeniami
         private void drawLine(Point startloc, Point endloc, char color)
         {
+            Image baseStation = Image.FromFile("base.png");         // grafika stacji bazowej
+            Image nodeStation = Image.FromFile("node.png");         // grafika stacji roboczej
+
             startloc.X = startloc.X + baseStation.Width / 2;
             startloc.Y = startloc.Y + baseStation.Height / 2;
 
@@ -116,11 +109,9 @@ namespace graf
             picture.MouseClick += new MouseEventHandler((sender, e) =>
             {
                 if (e.Button == System.Windows.Forms.MouseButtons.Right) 
-                { 
-                    int range = (int)numericUpDown3.Value;
+                {
+                    drawRange(ID);
                     drawConn(ID);
-                    this.CreateGraphics().DrawEllipse(new Pen(Brushes.Green, 2), pictureBoxes[ID].Location.X - range, pictureBoxes[ID].Location.Y - range, 2 * range, 2 * range);
-                    
                 }
             });
  
@@ -143,16 +134,52 @@ namespace graf
 
         }
 
+        private void drawConn()
+        {
+            for (int i = 0; i < nodes.Count; i++)
+            {
+                Point begin = nodes[i].getLoc();
+                List<int> neighbours = nodes[i].getConnDev();
+
+                for (int j = 0; j < neighbours.Count; j++)
+                {
+                    Point end = nodes[neighbours[j]].getLoc();
+                    drawLine(begin, end, 'b');
+                }
+            }
+        }
+
+        private void drawConn(int ID)
+        {
+
+            Point begin = nodes[ID].getLoc();
+            List<int> neighbours = nodes[ID].getConnDev();
+
+            for (int j = 0; j < neighbours.Count; j++)
+            {
+                Point end = nodes[neighbours[j]].getLoc();
+                drawLine(begin, end, 'y');
+            }
+        }
+
+        private void drawRange(int ID)
+        {
+            this.CreateGraphics().DrawEllipse(new Pen(Brushes.Green, 2), pictureBoxes[ID].Location.X - range, pictureBoxes[ID].Location.Y - range, 2 * range, 2 * range);
+        }
+
+
+// Przyciski
+// --------------------------------------------------------------------------------------------------
+
+        int index = 0;
+
         // Metoda wywolywana po nacisnieciu przycisku "Dodaj urzadzenie"
         // dodaje nowe urzadzenie o podanych parametrach do kolekcji urzadzen
         private void button1_Click(object sender, EventArgs e)
         {
             loc = new Point((int)numericUpDown1.Value, (int)numericUpDown2.Value);
             Node station = new Node(nodes.Count(), loc, checkType.Checked);
-            //int[] tab = { 0 };
-            //station.setConnDev(tab);
             nodes.Add(station);
-            count++;
         }
 
         // Metoda wywolywana po nacisnieciu przycisku "Rysuj"
@@ -177,6 +204,21 @@ namespace graf
             connections();
         }
 
+        private void button3_Click(object sender, EventArgs e)
+        {
+            drawConn();
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            this.Invalidate();
+        }
+
+
+// Obługa zdarzeń
+// --------------------------------------------------------------------------------------------------
+        private int xPos, yPos;                                 // zmienne sluzace do przechowywania aktualnego polozenia
+        
         private void picture_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
@@ -207,25 +249,14 @@ namespace graf
             connections();
         }
 
-        private void copyLocation()
-        {
-            for (int i = 0; i < nodes.Count(); i++)
-            {
-                nodes[i].setLoc(pictureBoxes[i].Location);
-            }
-        }
-        
-        private void button3_Click(object sender, EventArgs e)
-        {
-            connections();
-            drawConn();
-        }
 
-        private int getLenght(Point start, Point end)
-        { 
-            double lenght;
-            lenght = Math.Sqrt(Math.Pow((end.Y - start.Y), 2) + Math.Pow((end.X - start.X), 2));
-            return (int)lenght;
+// Funckje główne
+// --------------------------------------------------------------------------------------------------
+
+        public Form1()
+        {
+            WindowState = FormWindowState.Maximized;
+            InitializeComponent();
         }
 
         private void connections()
@@ -235,8 +266,6 @@ namespace graf
                 nodes[i].clearConnDev();
             }
 
-            maxlenght = (int)numericUpDown3.Value;
-
             for (int i = 0; i < nodes.Count(); i++)
             {
                 List<int> neighbours = new List<int>();
@@ -245,7 +274,7 @@ namespace graf
                     if (nodes[i].getID() != nodes[j].getID())
                     {
                         int len = getLenght(nodes[i].getLoc(), nodes[j].getLoc());
-                        if (len < maxlenght)
+                        if (len < range)
                         {
                             neighbours.Add(nodes[j].getID());
                         }
@@ -255,36 +284,30 @@ namespace graf
             }
         }
 
-        private void button4_Click(object sender, EventArgs e)
+
+// Funckje pomocnicze
+// --------------------------------------------------------------------------------------------------
+
+        private int getLenght(Point start, Point end)
         {
-            this.Invalidate();
+            double lenght;
+            lenght = Math.Sqrt(Math.Pow((end.Y - start.Y), 2) + Math.Pow((end.X - start.X), 2));
+            return (int)lenght;
         }
 
-        private void drawConn()
+        private void copyLocation()
         {
-            for (int i = 0; i < nodes.Count; i++)
+            for (int i = 0; i < nodes.Count(); i++)
             {
-                Point begin = nodes[i].getLoc();
-                List<int> neighbours = nodes[i].getConnDev();
-
-                for (int j = 0; j < neighbours.Count; j++)
-                {
-                    Point end = nodes[neighbours[j]].getLoc();
-                    drawLine(begin, end, 'b');
-                }
+                nodes[i].setLoc(pictureBoxes[i].Location);
             }
         }
 
-        private void drawConn(int ID)
+        private void numericUpDown3_ValueChanged(object sender, EventArgs e)
         {
-                Point begin = nodes[ID].getLoc();
-                List<int> neighbours = nodes[ID].getConnDev();
-
-                for (int j = 0; j < neighbours.Count; j++)
-                {
-                    Point end = nodes[neighbours[j]].getLoc();
-                    drawLine(begin, end, 'y');
-                }
+            range = (int)numericUpDown3.Value;
+            this.Invalidate();
+            connections();
         }
 
      }
