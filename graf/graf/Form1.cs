@@ -23,14 +23,8 @@ namespace graf
         Font font = new Font("Arial", 8);                       // typ oraz rozmiar czcionki uzywanej do podpisywania elementow na rysunku
         SolidBrush brush = new SolidBrush(Color.Black);         // kolor pedzla sluzacego do rysowania polaczen miedzy urzedzeniami
         string info;
-        enum brushColor{
-            black = 0,
-            green = 1,
-            yellow = 2,
-            red = 3
-        };
 
-        private int xPos, yPos;                         // zmienne sluzace do przechowywania aktualnego polozenia
+        private int xPos, yPos;                                 // zmienne sluzace do przechowywania aktualnego polozenia
         private PictureBox picture;
         private List<PictureBox> pictureBoxes = new List<PictureBox>();
 
@@ -62,7 +56,7 @@ namespace graf
                 {
                     int range = (int)numericUpDown3.Value;
                     this.CreateGraphics().DrawEllipse(new Pen(Brushes.Green, 2), pictureBoxes[ID].Location.X - range, pictureBoxes[ID].Location.Y - range, 2 * range, 2 * range);
-
+                    drawConn(ID);
                 }
             });
 
@@ -126,7 +120,7 @@ namespace graf
                 { 
                     int range = (int)numericUpDown3.Value;
                     this.CreateGraphics().DrawEllipse(new Pen(Brushes.Green, 2), pictureBoxes[ID].Location.X - range, pictureBoxes[ID].Location.Y - range, 2 * range, 2 * range);
-                
+                    drawConn(ID);
                 }
             });
  
@@ -183,7 +177,6 @@ namespace graf
             connections();
         }
 
-
         private void picture_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
@@ -225,18 +218,7 @@ namespace graf
         private void button3_Click(object sender, EventArgs e)
         {
             connections();
-
-            for (int i = 0; i < nodes.Count; i++)
-            {
-                Point begin = nodes[i].getLoc();
-                List<int> neighbours = nodes[i].getConnDev();
-
-                for (int j = 0; j < neighbours.Count; j++)
-                {
-                    Point end = nodes[neighbours[j]].getLoc();
-                    drawLine(begin, end, 'b');
-                }
-            }
+            drawConn();
         }
 
         private int getLenght(Point start, Point end)
@@ -271,6 +253,38 @@ namespace graf
                 }
                 nodes[i].setConnDev(neighbours);
             }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            this.Invalidate();
+        }
+
+        private void drawConn()
+        {
+            for (int i = 0; i < nodes.Count; i++)
+            {
+                Point begin = nodes[i].getLoc();
+                List<int> neighbours = nodes[i].getConnDev();
+
+                for (int j = 0; j < neighbours.Count; j++)
+                {
+                    Point end = nodes[neighbours[j]].getLoc();
+                    drawLine(begin, end, 'b');
+                }
+            }
+        }
+
+        private void drawConn(int ID)
+        {
+                Point begin = nodes[ID].getLoc();
+                List<int> neighbours = nodes[ID].getConnDev();
+
+                for (int j = 0; j < neighbours.Count; j++)
+                {
+                    Point end = nodes[neighbours[j]].getLoc();
+                    drawLine(begin, end, 'y');
+                }
         }
 
      }
