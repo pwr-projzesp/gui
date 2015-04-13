@@ -15,7 +15,6 @@ namespace graf
         int range = 0;  
         Point loc = new Point();                                // zmienna sluzaca do przechowywania polozenia ( (0;0) - gorny prawy rog okna aplikacji)
         List<Node> nodes = new List<Node>();                    // kolekcja zawierajace wszystkie urzadzenia
-
         private PictureBox picture;
         private List<PictureBox> pictureBoxes = new List<PictureBox>();
 
@@ -23,7 +22,8 @@ namespace graf
 // Funckje rysujące
 // --------------------------------------------------------------------------------------------------
 
-        string info;
+        private string info;
+        private int xPos, yPos;                                 // zmienne sluzace do przechowywania aktualnego polozenia
 
         // Metoda sluzaca do narysowania na ekranie pojedynczej stacji bazowej
         private void drawBase(Point loc, int ID)
@@ -41,15 +41,6 @@ namespace graf
                 e.Graphics.DrawString(nazwa, Font, Brushes.Black, 0, 0);
             });
 
-            picture.MouseClick += new MouseEventHandler((sender, e) =>
-            {
-                if (e.Button == System.Windows.Forms.MouseButtons.Right)
-                {
-                    drawRange(ID);
-                    drawConn(ID);
-                }
-            });
-
             picture.MouseDoubleClick += new MouseEventHandler((sender, e) =>
             {
                 Point loca = nodes[ID].getLoc();
@@ -60,9 +51,34 @@ namespace graf
                 MessageBox.Show(info, nazwa);
             });
 
-            picture.MouseDown += new MouseEventHandler(picture_MouseDown);
+            picture.MouseDown += new MouseEventHandler((sender, e) =>
+            {
+                if (e.Button == MouseButtons.Left)
+                {
+                    xPos = e.X;
+                    yPos = e.Y;
+                }
+                if (e.Button == MouseButtons.Right)
+                {
+                    this.Invalidate();
+                }
+            });
             picture.MouseMove += new MouseEventHandler(picture_MouseMove);
-            picture.MouseUp += new MouseEventHandler(picture_MouseUp);
+
+            picture.MouseUp += new MouseEventHandler((sender, e) =>
+            {
+                if (e.Button == MouseButtons.Left)
+                {
+                    copyLocation();
+                    connections();
+                }
+                if (e.Button == MouseButtons.Right)
+                {
+                    drawRange(ID);
+                    drawConn(ID);
+                }
+            });
+
             picture.Cursor = Cursors.Hand;
             Controls.Add(picture);
             pictureBoxes.Add(picture);
@@ -105,15 +121,6 @@ namespace graf
                 e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
                 e.Graphics.DrawString(nazwa, Font, Brushes.Black, 0, 0);
             });
-
-            picture.MouseClick += new MouseEventHandler((sender, e) =>
-            {
-                if (e.Button == System.Windows.Forms.MouseButtons.Right) 
-                {
-                    drawRange(ID);
-                    drawConn(ID);
-                }
-            });
  
             picture.MouseDoubleClick += new MouseEventHandler((sender, e) => 
             {
@@ -125,9 +132,34 @@ namespace graf
                 MessageBox.Show(info, nazwa);           
             });
 
-            picture.MouseDown += new MouseEventHandler(picture_MouseDown);
+            picture.MouseDown += new MouseEventHandler((sender, e) =>
+            {
+                if (e.Button == MouseButtons.Left)
+                {
+                    xPos = e.X;
+                    yPos = e.Y;
+                }
+                if (e.Button == MouseButtons.Right)
+                {
+                    this.Invalidate();
+                }         
+            });
             picture.MouseMove += new MouseEventHandler(picture_MouseMove);
-            picture.MouseUp += new MouseEventHandler(picture_MouseUp);
+           
+            picture.MouseUp += new MouseEventHandler((sender, e) =>
+            {
+                if (e.Button == MouseButtons.Left)
+                {
+                    copyLocation();
+                    connections();
+                }
+                if (e.Button == MouseButtons.Right)
+                {
+                    drawRange(ID);
+                    drawConn(ID);
+                }
+            });
+
             picture.Cursor = Cursors.Hand;
             Controls.Add(picture);
             pictureBoxes.Add(picture);
@@ -151,7 +183,6 @@ namespace graf
 
         private void drawConn(int ID)
         {
-
             Point begin = nodes[ID].getLoc();
             List<int> neighbours = nodes[ID].getConnDev();
 
@@ -217,37 +248,26 @@ namespace graf
 
 // Obługa zdarzeń
 // --------------------------------------------------------------------------------------------------
-        private int xPos, yPos;                                 // zmienne sluzace do przechowywania aktualnego polozenia
-        
-        private void picture_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                xPos = e.X;
-                yPos = e.Y;
-            }
-        }
 
         private void picture_MouseMove(object sender, MouseEventArgs e)
         {
-            PictureBox p = sender as PictureBox;
-
-            if (p != null)
+            if (e.Button == MouseButtons.Left)
             {
-                if (e.Button == MouseButtons.Left)
+                PictureBox p = sender as PictureBox;
+
+                if (p != null)
                 {
-                    p.Top += (e.Y - yPos);
-                    p.Left += (e.X - xPos);
-                    this.Invalidate();
+                    //if (e.Button == MouseButtons.Left)
+                   // {
+                        p.Top += (e.Y - yPos);
+                        p.Left += (e.X - xPos);
+                        this.Invalidate();
+                    //}
                 }
             }
+
         }
 
-        private void picture_MouseUp(object sender, MouseEventArgs e)
-        {
-            copyLocation();
-            connections();
-        }
 
 
 // Funckje główne
