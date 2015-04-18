@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,7 +14,7 @@ namespace graf
         private int ID;                                     // zmienna przechowujaca ID urzadzenia
         private Point loc = new Point();                    // zmienna przechowujaca polozenie urzadzenia
         private List<int> connDev = new List<int>();        // kolekcja przechowujaca ID urzadzen, z ktorymi dane urzadzenie ma polaczenie     
-       
+        private static int range;                           // zmienna statyczna przechowujaca aktualny zasieg urzadzen
 
 
 // Constructors
@@ -51,6 +52,10 @@ namespace graf
         {
             return ID;
         }
+        public static int   getRange()
+        {
+            return range;
+        }
         public Point        getLoc()
         {
             return loc;
@@ -69,6 +74,10 @@ namespace graf
         public void setID(int ID)
         {
             this.ID = ID;
+        }
+        public static void setRange(int range1)
+        {
+            range = range1;
         }
         public void setLoc(Point loc)
         {

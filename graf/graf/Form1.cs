@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,11 +13,12 @@ namespace graf
 {
     public partial class Form1 : Form
     {
-        int range = 0;  
+        int range = 0;                                          // zmienna przechowujaca wartosc zasiegu
         Point loc = new Point();                                // zmienna sluzaca do przechowywania polozenia ( (0;0) - gorny prawy rog okna aplikacji)
         List<Node> nodes = new List<Node>();                    // kolekcja zawierajace wszystkie urzadzenia
-        private PictureBox picture;
-        private List<PictureBox> pictureBoxes = new List<PictureBox>();
+        private PictureBox picture;                             // pojedynczy picturebox reprezentujacy fizyczny obiekt
+        private List<PictureBox> pictureBoxes = new List<PictureBox>();     // kolekcja przechowujaca pictureboxy z wezlami
+
 
 
 // Funckje rysujące
@@ -166,6 +168,7 @@ namespace graf
 
         }
 
+        // Metoda sluzaca do narysowania wszystkich dostepnych polaczen
         private void drawConn()
         {
             for (int i = 0; i < nodes.Count; i++)
@@ -181,6 +184,7 @@ namespace graf
             }
         }
 
+        // Metoda sluzaca do narysowania dostepnych dla danego urzadzenia polaczen
         private void drawConn(int ID)
         {
             Point begin = nodes[ID].getLoc();
@@ -192,11 +196,13 @@ namespace graf
                 drawLine(begin, end, 'y');
             }
         }
-
+        
+        // Metoda sluzaca do narysowania zasiegu urzadzenia o pdanym ID
         private void drawRange(int ID)
         {
-            this.CreateGraphics().DrawEllipse(new Pen(Brushes.Green, 2), pictureBoxes[ID].Location.X - range, pictureBoxes[ID].Location.Y - range, 2 * range, 2 * range);
+            this.CreateGraphics().DrawEllipse(new Pen(Brushes.Green, 2), pictureBoxes[ID].Location.X - Node.getRange(), pictureBoxes[ID].Location.Y - Node.getRange(), 2 * Node.getRange(), 2 * Node.getRange());
         }
+
 
 
 // Przyciski
@@ -217,7 +223,6 @@ namespace graf
         // wizualizuje na ekranie wszystkie obiekty kolekcji z urzadzeniami
         private void button2_Click(object sender, EventArgs e)
         {
-            //pictureBoxes.Clear();
             for (int i = index; i < nodes.Count(); i++)
             {
                 Node temp = nodes[i];
@@ -235,20 +240,26 @@ namespace graf
             connections();
         }
 
+        // Metoda wywolywana po nacisnieciu przycisku "Sprawdz polaczenia"
+        // wizualizuje dostepne polaczenia pomiedzy poszczegolnymi wezlami
         private void button3_Click(object sender, EventArgs e)
         {
             drawConn();
         }
 
+        // Metoda wywolywana po nacisnieciu przycisku "Wyczysc okno"
+        // czysci wizualizacje zasiegu i polaczen widoczne w oknie aplikacji
         private void button4_Click(object sender, EventArgs e)
         {
             this.Invalidate();
         }
 
 
+
 // Obługa zdarzeń
 // --------------------------------------------------------------------------------------------------
 
+        // Metoda wykorzystywana podczas przeciagania obiektow w oknie aplikacji
         private void picture_MouseMove(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
@@ -279,6 +290,7 @@ namespace graf
             InitializeComponent();
         }
 
+        // Metoda sluzaca do obliczania sasiadow wszystkich aktywnych urzadzen
         private void connections()
         {
             for (int i = 0; i < nodes.Count(); i++)
@@ -294,7 +306,7 @@ namespace graf
                     if (nodes[i].getID() != nodes[j].getID())
                     {
                         int len = getLenght(nodes[i].getLoc(), nodes[j].getLoc());
-                        if (len < range)
+                        if (len < Node.getRange())
                         {
                             neighbours.Add(nodes[j].getID());
                         }
@@ -305,9 +317,11 @@ namespace graf
         }
 
 
+
 // Funckje pomocnicze
 // --------------------------------------------------------------------------------------------------
 
+        // Metoda sluzaca do obliczania odleglosci pomiedzy danymi punktami
         private int getLenght(Point start, Point end)
         {
             double lenght;
@@ -315,6 +329,7 @@ namespace graf
             return (int)lenght;
         }
 
+        // Metoda sluzaca do synchronizacji lokalizacji wezlow i pictureboxow
         private void copyLocation()
         {
             for (int i = 0; i < nodes.Count(); i++)
@@ -323,12 +338,95 @@ namespace graf
             }
         }
 
+        // Metoda sluzaca do atomatycznej aktualizacji wartosci zasiegu
         private void numericUpDown3_ValueChanged(object sender, EventArgs e)
         {
-            range = (int)numericUpDown3.Value;
             this.Invalidate();
+            range = (int)numericUpDown3.Value;
+            Node.setRange(range);
             connections();
         }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            // Displays an OpenFileDialog so the user can select a Cursor.
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+            openFileDialog1.Filter = "Text files (*.txt)|*.txt";
+            openFileDialog1.Title = "Wybierz plik z topologia.";
+
+            // Show the Dialog.
+            // If the user clicked OK in the dialog and
+            // a .txt file was selected, open it.
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                String path = openFileDialog1.FileName;
+                System.IO.StreamReader file = new System.IO.StreamReader(@path);
+                try
+                {
+                    String line;
+                    int i = 0;
+                    Point location = new Point();
+                    Boolean isItBase;
+
+                    while ((line = file.ReadLine()) != null)
+                    {
+                        if (i == 0)
+                        {
+                            range = Int32.Parse(line);
+                            numericUpDown3.Value = range;
+                            i++;
+                        }
+                        else
+                        {
+                            String[] words = line.Split(' ');
+                            location.X = Int32.Parse(words[0]);
+                            location.Y = Int32.Parse(words[1]);
+                            isItBase = Convert.ToBoolean(words[2]);
+                            Node station = new Node(nodes.Count(), location, isItBase);
+                            nodes.Add(station);
+                        }
+                    }
+
+                    file.Close();
+                }
+                catch (IOException)
+                {
+                }
+            }
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+            openFileDialog1.Title = "Sciezka do zapisania topologii.";
+
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                String path = openFileDialog1.FileName;
+                System.IO.StreamWriter file = new System.IO.StreamWriter(@path, false);
+                try
+                {
+                    file.WriteLine(range);
+                    for (int i = 0; i < nodes.Count(); i++)
+                    {
+                        Point location = nodes[i].getLoc();
+                        string type;
+                        if (nodes[i].getType())
+                            type = "true";
+                        else
+                            type = "false";
+
+                        file.WriteLine(location.X + " " + location.Y + " " + type);
+                    }
+                    file.Close();
+                }
+                catch (IOException)
+                {
+                }
+            }
+        }
+
+
 
      }
 }
