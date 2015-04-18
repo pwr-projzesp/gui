@@ -254,99 +254,8 @@ namespace graf
             this.Invalidate();
         }
 
-
-
-// Obługa zdarzeń
-// --------------------------------------------------------------------------------------------------
-
-        // Metoda wykorzystywana podczas przeciagania obiektow w oknie aplikacji
-        private void picture_MouseMove(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                PictureBox p = sender as PictureBox;
-
-                if (p != null)
-                {
-                    //if (e.Button == MouseButtons.Left)
-                   // {
-                        p.Top += (e.Y - yPos);
-                        p.Left += (e.X - xPos);
-                        this.Invalidate();
-                    //}
-                }
-            }
-
-        }
-
-
-
-// Funckje główne
-// --------------------------------------------------------------------------------------------------
-
-        public Form1()
-        {
-            WindowState = FormWindowState.Maximized;
-            InitializeComponent();
-        }
-
-        // Metoda sluzaca do obliczania sasiadow wszystkich aktywnych urzadzen
-        private void connections()
-        {
-            for (int i = 0; i < nodes.Count(); i++)
-            {
-                nodes[i].clearConnDev();
-            }
-
-            for (int i = 0; i < nodes.Count(); i++)
-            {
-                List<int> neighbours = new List<int>();
-                for (int j = 0; j < nodes.Count(); j++)
-                {
-                    if (nodes[i].getID() != nodes[j].getID())
-                    {
-                        int len = getLenght(nodes[i].getLoc(), nodes[j].getLoc());
-                        if (len < Node.getRange())
-                        {
-                            neighbours.Add(nodes[j].getID());
-                        }
-                    }
-                }
-                nodes[i].setConnDev(neighbours);
-            }
-        }
-
-
-
-// Funckje pomocnicze
-// --------------------------------------------------------------------------------------------------
-
-        // Metoda sluzaca do obliczania odleglosci pomiedzy danymi punktami
-        private int getLenght(Point start, Point end)
-        {
-            double lenght;
-            lenght = Math.Sqrt(Math.Pow((end.Y - start.Y), 2) + Math.Pow((end.X - start.X), 2));
-            return (int)lenght;
-        }
-
-        // Metoda sluzaca do synchronizacji lokalizacji wezlow i pictureboxow
-        private void copyLocation()
-        {
-            for (int i = 0; i < nodes.Count(); i++)
-            {
-                nodes[i].setLoc(pictureBoxes[i].Location);
-            }
-        }
-
-        // Metoda sluzaca do atomatycznej aktualizacji wartosci zasiegu
-        private void numericUpDown3_ValueChanged(object sender, EventArgs e)
-        {
-            this.Invalidate();
-            range = (int)numericUpDown3.Value;
-            Node.setRange(range);
-            connections();
-        }
-
+        // Metoda wywolywana po nacisnieciu przycisku "Wczytaj topologie z pliku"
+        // pobiera dane z pliku i na ich podstawie tworzy nowa topologie sieci
         private void button5_Click(object sender, EventArgs e)
         {
             // Displays an OpenFileDialog so the user can select a Cursor.
@@ -395,6 +304,8 @@ namespace graf
             }
         }
 
+        // Metoda wywolywana po nacisnieciu przycisku "Zapisz topologie do pliku"
+        // zapisuje aktualnie ustawiona topologie do wskazanego pliku
         private void button6_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
@@ -428,5 +339,94 @@ namespace graf
 
 
 
+// Obługa zdarzeń
+// --------------------------------------------------------------------------------------------------
+
+        // Metoda wykorzystywana podczas przeciagania obiektow w oknie aplikacji
+        private void picture_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                PictureBox p = sender as PictureBox;
+
+                if (p != null)
+                {
+                    //if (e.Button == MouseButtons.Left)
+                   // {
+                        p.Top += (e.Y - yPos);
+                        p.Left += (e.X - xPos);
+                        this.Invalidate();
+                    //}
+                }
+            }
+
+        }
+
+
+// Funckja główna
+// --------------------------------------------------------------------------------------------------
+
+        public Form1()
+        {
+            WindowState = FormWindowState.Maximized;
+            InitializeComponent();
+        }
+
+
+
+// Funckje pomocnicze
+// --------------------------------------------------------------------------------------------------
+
+        // Metoda sluzaca do obliczania odleglosci pomiedzy danymi punktami
+        private int getLenght(Point start, Point end)
+        {
+            double lenght;
+            lenght = Math.Sqrt(Math.Pow((end.Y - start.Y), 2) + Math.Pow((end.X - start.X), 2));
+            return (int)lenght;
+        }
+
+        // Metoda sluzaca do synchronizacji lokalizacji wezlow i pictureboxow
+        private void copyLocation()
+        {
+            for (int i = 0; i < nodes.Count(); i++)
+            {
+                nodes[i].setLoc(pictureBoxes[i].Location);
+            }
+        }
+
+        // Metoda sluzaca do atomatycznej aktualizacji wartosci zasiegu
+        private void numericUpDown3_ValueChanged(object sender, EventArgs e)
+        {
+            this.Invalidate();
+            range = (int)numericUpDown3.Value;
+            Node.setRange(range);
+            connections();
+        }
+
+        // Metoda sluzaca do obliczania sasiadow wszystkich aktywnych urzadzen
+        private void connections()
+        {
+            for (int i = 0; i < nodes.Count(); i++)
+            {
+                nodes[i].clearConnDev();
+            }
+
+            for (int i = 0; i < nodes.Count(); i++)
+            {
+                List<int> neighbours = new List<int>();
+                for (int j = 0; j < nodes.Count(); j++)
+                {
+                    if (nodes[i].getID() != nodes[j].getID())
+                    {
+                        int len = getLenght(nodes[i].getLoc(), nodes[j].getLoc());
+                        if (len < Node.getRange())
+                        {
+                            neighbours.Add(nodes[j].getID());
+                        }
+                    }
+                }
+                nodes[i].setConnDev(neighbours);
+            }
+        }
      }
 }
