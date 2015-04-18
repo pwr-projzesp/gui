@@ -49,3 +49,9 @@ C:\Users\KamyK\Documents\GitHub\gui\graf\graf\obj\Debug\graf.csprojResolveAssemb
 C:\Users\KamyK\Documents\GitHub\gui\graf\graf\obj\Debug\graf.Form1.resources
 C:\Users\KamyK\Documents\GitHub\gui\graf\graf\obj\Debug\graf.Properties.Resources.resources
 C:\Users\KamyK\Documents\GitHub\gui\graf\graf\obj\Debug\graf.csproj.GenerateResource.Cache
+D:\Dysk Google\VI semestr\Projekt Zespołowy\gui\graf\graf\bin\Debug\graf.exe
+D:\Dysk Google\VI semestr\Projekt Zespołowy\gui\graf\graf\bin\Debug\graf.pdb
+D:\Dysk Google\VI semestr\Projekt Zespołowy\gui\graf\graf\obj\Debug\graf.csprojResolveAssemblyReference.cache
+D:\Dysk Google\VI semestr\Projekt Zespołowy\gui\graf\graf\obj\Debug\graf.Form1.resources
+D:\Dysk Google\VI semestr\Projekt Zespołowy\gui\graf\graf\obj\Debug\graf.Properties.Resources.resources
+D:\Dysk Google\VI semestr\Projekt Zespołowy\gui\graf\graf\obj\Debug\graf.csproj.GenerateResource.Cache

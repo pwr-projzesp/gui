@@ -261,7 +261,7 @@ namespace graf
             // Displays an OpenFileDialog so the user can select a Cursor.
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
             openFileDialog1.Filter = "Text files (*.txt)|*.txt";
-            openFileDialog1.Title = "Wybierz plik z topologia.";
+            openFileDialog1.Title = "Wybierz plik z topologią.";
 
             // Show the Dialog.
             // If the user clicked OK in the dialog and
@@ -308,8 +308,9 @@ namespace graf
         // zapisuje aktualnie ustawiona topologie do wskazanego pliku
         private void button6_Click(object sender, EventArgs e)
         {
-            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+            SaveFileDialog openFileDialog1 = new SaveFileDialog();
             openFileDialog1.Title = "Sciezka do zapisania topologii.";
+            openFileDialog1.Filter = "Text files (*.txt)|*.txt";
 
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
