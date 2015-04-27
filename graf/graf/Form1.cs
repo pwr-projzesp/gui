@@ -62,7 +62,7 @@ namespace graf
                 }
                 if (e.Button == MouseButtons.Right)
                 {
-                    this.Invalidate();
+                    groupBox4.Invalidate();
                 }
             });
             picture.MouseMove += new MouseEventHandler(picture_MouseMove);
@@ -82,7 +82,7 @@ namespace graf
             });
 
             picture.Cursor = Cursors.Hand;
-            Controls.Add(picture);
+            groupBox4.Controls.Add(picture);
             pictureBoxes.Add(picture);
         }
         
@@ -99,13 +99,13 @@ namespace graf
             endloc.Y = endloc.Y + nodeStation.Height / 2;
 
             if (color == 'b')
-                this.CreateGraphics().DrawLine(new Pen(Brushes.Black, 3), startloc, endloc);
+                groupBox4.CreateGraphics().DrawLine(new Pen(Brushes.Black, 3), startloc, endloc);
             else if (color == 'g')
-                this.CreateGraphics().DrawLine(new Pen(Brushes.Green, 3), startloc, endloc);
+                groupBox4.CreateGraphics().DrawLine(new Pen(Brushes.Green, 3), startloc, endloc);
             else if (color == 'y')
-                this.CreateGraphics().DrawLine(new Pen(Brushes.Yellow, 3), startloc, endloc);
+                groupBox4.CreateGraphics().DrawLine(new Pen(Brushes.Yellow, 3), startloc, endloc);
             else if (color == 'r')
-                this.CreateGraphics().DrawLine(new Pen(Brushes.Red, 3), startloc, endloc);
+                groupBox4.CreateGraphics().DrawLine(new Pen(Brushes.Red, 3), startloc, endloc);
         }
 
         // Metoda sluzaca do narysowania na ekranie pojedynczej stacji roboczej
@@ -143,7 +143,7 @@ namespace graf
                 }
                 if (e.Button == MouseButtons.Right)
                 {
-                    this.Invalidate();
+                    groupBox4.Invalidate();
                 }         
             });
             picture.MouseMove += new MouseEventHandler(picture_MouseMove);
@@ -161,9 +161,9 @@ namespace graf
                     drawConn(ID);
                 }
             });
-
+            
             picture.Cursor = Cursors.Hand;
-            Controls.Add(picture);
+            groupBox4.Controls.Add(picture);
             pictureBoxes.Add(picture);
 
         }
@@ -200,7 +200,7 @@ namespace graf
         // Metoda sluzaca do narysowania zasiegu urzadzenia o pdanym ID
         private void drawRange(int ID)
         {
-            this.CreateGraphics().DrawEllipse(new Pen(Brushes.Green, 2), pictureBoxes[ID].Location.X - Node.getRange(), pictureBoxes[ID].Location.Y - Node.getRange(), 2 * Node.getRange(), 2 * Node.getRange());
+            groupBox4.CreateGraphics().DrawEllipse(new Pen(Brushes.Green, 2), pictureBoxes[ID].Location.X - Node.getRange(), pictureBoxes[ID].Location.Y - Node.getRange(), 2 * Node.getRange(), 2 * Node.getRange());
         }
 
 
@@ -251,7 +251,7 @@ namespace graf
         // czysci wizualizacje zasiegu i polaczen widoczne w oknie aplikacji
         private void button4_Click(object sender, EventArgs e)
         {
-            this.Invalidate();
+            groupBox4.Invalidate();
         }
 
         // Metoda wywolywana po nacisnieciu przycisku "Wczytaj topologie z pliku"
@@ -337,6 +337,13 @@ namespace graf
             }
         }
 
+        // Metoda wywolywana po nacisnieciu przycisku "Pokaż ruch w sieci"
+        // wyświetla w nowym oknie dane odbierane przez port usb od stacji bazowej
+        private void button7_Click(object sender, EventArgs e)
+        {
+            
+        }
+
 
 
 // Obługa zdarzeń
@@ -355,7 +362,7 @@ namespace graf
                    // {
                         p.Top += (e.Y - yPos);
                         p.Left += (e.X - xPos);
-                        this.Invalidate();
+                        groupBox4.Invalidate();
                     //}
                 }
             }
@@ -397,7 +404,7 @@ namespace graf
         // Metoda sluzaca do atomatycznej aktualizacji wartosci zasiegu
         private void numericUpDown3_ValueChanged(object sender, EventArgs e)
         {
-            this.Invalidate();
+            groupBox4.Invalidate();
             range = (int)numericUpDown3.Value;
             Node.setRange(range);
             connections();
@@ -428,5 +435,7 @@ namespace graf
                 nodes[i].setConnDev(neighbours);
             }
         }
+
+
      }
 }
