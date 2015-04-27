@@ -42,59 +42,42 @@ namespace graf
 {
     class Listener
     {
-        Prompt prompt;
         MoteIF mote;
         string motecom;
-        public Boolean active;
+        Form2 form2;
+        Boolean active;
 
-        public Listener(ArrayList args, Prompt prompt)
+        public Listener(string msg, Form2 form)
         {
-            if (args.Count != 3)
-            {
-                prompt.WriteLine("listen: Wrong arguments", prompt.errorTextColor);
-                return;
-            }
-            this.prompt = prompt;
-            motecom = args[2].ToString();
+            form2 = form;
+
+            motecom = msg;
             try
             {
                 mote = new MoteIF(motecom);
             }
             catch (Exception e)
             {
-                prompt.WriteLine(e.Message, prompt.errorTextColor);
+                form2.add_Msg(e.Message);
                 return;
             }
             active = true;
-            prompt.WriteLine("Listening on " + motecom + " (^C or 'exit' returns to prompt)", prompt.successTextColor);
+            form2.add_Msg("Listening on " + motecom + " (^C or 'exit' returns to prompt)");
             mote.onMessageArrived += newMsgHandler;
         }
 
         public void stop(/*Object s, ConsoleCancelEventArgs e*/)
         {
-            prompt.WriteLine("Closing listener on " + motecom + "...", prompt.successTextColor);
+            active = false;
+            form2.add_Msg("Closing listener on " + motecom + "...");
             mote.onMessageArrived -= newMsgHandler;
             mote.Close();
         }
 
         private void newMsgHandler(Object sender, EventArgSerialMessage e)
         {
-            prompt.WriteLine(BitConverter.ToString(e.msg.GetMessageBytes(), 0), Console.ForegroundColor);
+            form2.add_Msg(BitConverter.ToString(e.msg.GetMessageBytes(), 0));
         }
 
-        static public void PrintHelp(Prompt prompt)
-        {
-            prompt.WriteLine("USAGE");
-            prompt.WriteLine("  listen -comm <MOTECOM>", prompt.helpTextColor);
-            prompt.WriteLine("");
-            prompt.WriteLine("DESCRIPTION");
-            prompt.WriteLine("  Listen for serial packets from the given MOTECOM");
-            prompt.WriteLine("  Ctrl+C closes the listener for the local client. ");
-            prompt.WriteLine("  The control client stops the listener with an 'exit' command.");
-            prompt.WriteLine("");
-            prompt.WriteLine("EXAMPLE");
-            prompt.WriteLine("  listen -comm serial@com4:57600");
-
-        }
     }
 }

@@ -342,9 +342,9 @@ namespace graf
         // wyświetla w nowym oknie dane odbierane przez port usb od stacji bazowej
         private void button7_Click(object sender, EventArgs e)
         {
-            
+            Form2 form2 = new Form2();
+            form2.Show();
         }
-
 
 
 // Obługa zdarzeń

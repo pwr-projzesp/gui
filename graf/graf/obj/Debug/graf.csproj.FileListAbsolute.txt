@@ -56,3 +56,4 @@ D:\Dysk Google\VI semestr\Projekt Zespołowy\gui\graf\graf\obj\Debug\graf.Form1.
 D:\Dysk Google\VI semestr\Projekt Zespołowy\gui\graf\graf\obj\Debug\graf.Properties.Resources.resources
 D:\Dysk Google\VI semestr\Projekt Zespołowy\gui\graf\graf\obj\Debug\graf.csproj.GenerateResource.Cache
 C:\Users\KamyK\Documents\GitHub\gui\graf\graf\bin\Debug\tinyos-sdk.dll
+C:\Users\KamyK\Documents\GitHub\gui\graf\graf\obj\Debug\graf.Form2.resources
