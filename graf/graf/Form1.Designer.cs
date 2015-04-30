@@ -280,16 +280,16 @@
             this.groupBox5.Controls.Add(this.button7);
             this.groupBox5.Location = new System.Drawing.Point(613, 486);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(159, 114);
+            this.groupBox5.Size = new System.Drawing.Size(159, 58);
             this.groupBox5.TabIndex = 18;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Badanie ruchu w sieci";
             // 
             // button7
             // 
-            this.button7.Location = new System.Drawing.Point(11, 71);
+            this.button7.Location = new System.Drawing.Point(25, 19);
             this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(130, 23);
+            this.button7.Size = new System.Drawing.Size(119, 31);
             this.button7.TabIndex = 4;
             this.button7.Text = "Pokaż ruch w sieci";
             this.button7.UseVisualStyleBackColor = true;

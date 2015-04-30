@@ -42,11 +42,13 @@ namespace graf
 {
     class Listener
     {
-        MoteIF mote;
-        string motecom;
-        Form2 form2;
-        Boolean active;
+        MoteIF mote;            // obiekt klasy MoteIF odpowiedzialnej za niskopoziomowe odbieranie danych z określonego portu
+        string motecom;         // łańcuch znaków zawierający numer portu i szybkość transmisji w forie "serial@numerportu:szybkosctransmisji" np. "serial@com4:57600"
+        Form2 form2;            // zmienna zawierająca formularz do którego zwracamy wszystkie odebrane dane
+        Boolean active;         // zmienna zawierająca dane czy jest aktywny jakikolwiek nasłuch
 
+        // Konstruktor przyjmujący jako parametry msg - zawierajaca numer portu i szybkosc transmisji,
+        // oraz formularz do którego ma zwrócić odebrane dane
         public Listener(string msg, Form2 form)
         {
             form2 = form;
@@ -66,14 +68,19 @@ namespace graf
             mote.onMessageArrived += newMsgHandler;
         }
 
+        // Metoda zatrzymująca nasłuch na portach
         public void stop(/*Object s, ConsoleCancelEventArgs e*/)
         {
-            active = false;
-            form2.add_Msg("Closing listener on " + motecom + "...");
-            mote.onMessageArrived -= newMsgHandler;
-            mote.Close();
+            if (active == true)
+            {
+                active = false;
+                form2.add_Msg("Closing listener on " + motecom + "...");
+                mote.onMessageArrived -= newMsgHandler;
+                mote.Close();
+            }
         }
 
+        // Metoda przekazująca do formularza dane odebrane od stacji bazowej
         private void newMsgHandler(Object sender, EventArgSerialMessage e)
         {
             form2.add_Msg(BitConverter.ToString(e.msg.GetMessageBytes(), 0));

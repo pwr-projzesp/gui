@@ -16,14 +16,25 @@ namespace graf
 {
     public partial class Form2 : Form
     {
-        Listener listener;
-        delegate void SetTextCallback(string text);
+        Listener listener;                              // nowy obiekt klasy Listener
 
         public Form2()
         {
             InitializeComponent();     
         }
 
+        // Metody potrzebne do prawidłowego wyświetlania wiadomości otrzymanych w wyniku działania innego wątku
+        delegate void SetTextCallback(string text);
+        private const int CP_NOCLOSE_BUTTON = 0x200;
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams myCp = base.CreateParams;
+                myCp.ClassStyle = myCp.ClassStyle | CP_NOCLOSE_BUTTON;
+                return myCp;
+            }
+        }
         private void SetText(string text)
         {
             // InvokeRequired required compares the thread ID of the
@@ -40,11 +51,16 @@ namespace graf
             }
         }
 
+        // Metoda dodaje tekst do tekstboxa
         public void add_Msg(String msg)
         {
             SetText(msg);
         }
 
+// Przyciski 
+
+        // Metoda wywoływana po naciśnieciu przycisku start
+        // odczytuje dane z textboxów i tworzy nowy obiekt klasy Listener
         private void button1_Click(object sender, EventArgs e)
         {
             string port = textBox2.Text;
@@ -53,9 +69,21 @@ namespace graf
             listener = new Listener(msg, this);
         }
 
+        // Metoda wywoływana po naciśnieciu przycisku stop
+        // zatrzymuje nasłuch na wszystich portach
         private void button2_Click(object sender, EventArgs e)
         {
-            listener.stop();
+            if (listener != null)
+                listener.stop();
+        }
+
+        // Metoda wywoływana po naciśnieciu przycisku exit
+        // w bezpieczny sposób wyłącza formularz 2 i zatrzymuje nasłuch na portach nie powodując wyrzucania wyjątków
+        private void button3_Click(object sender, EventArgs e)
+        {
+            if (listener != null)
+                listener.stop();
+            this.Close();
         }
 
     }
