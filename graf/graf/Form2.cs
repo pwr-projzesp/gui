@@ -59,7 +59,7 @@ namespace graf
             for (int i = 8; i < msgSplit.Count(); i++)
             {
                 int value = Convert.ToInt32(msgSplit[i], 16);
-                if (value >= 65 && value <= 90 || value == 32 || value == 95 || value >= 97 && value <= 122)
+                if (value >= 65 && value <= 90 || value == 32 || value == 95 || value >= 97 && value <= 122 || value == 125 || value==126)
                 {
                     char charValue = (char)value;
                     newmsg += charValue;
