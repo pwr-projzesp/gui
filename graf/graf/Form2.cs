@@ -54,7 +54,18 @@ namespace graf
         // Metoda dodaje tekst do tekstboxa
         public void add_Msg(String msg)
         {
-            SetText(msg);
+            string newmsg = "";
+            string[] msgSplit = msg.Split('-');
+            for (int i = 8; i < msgSplit.Count(); i++)
+            {
+                int value = Convert.ToInt32(msgSplit[i], 16);
+                if (value >= 65 && value <= 90 || value == 32 || value == 95 || value >= 97 && value <= 122)
+                {
+                    char charValue = (char)value;
+                    newmsg += charValue;
+                }
+            }
+            SetText(newmsg);
         }
 
 // Przyciski 
