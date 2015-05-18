@@ -40,21 +40,20 @@ D:\Dysk Google\VI semestr\Projekt Zespołowy\graf\graf\obj\Debug\graf.pdb
 D:\Dysk Google\VI semestr\Projekt Zespołowy\gui\graf\graf\bin\Debug\graf.exe.config
 D:\Dysk Google\VI semestr\Projekt Zespołowy\gui\graf\graf\obj\Debug\graf.exe
 D:\Dysk Google\VI semestr\Projekt Zespołowy\gui\graf\graf\obj\Debug\graf.pdb
-C:\Users\KamyK\Documents\GitHub\gui\graf\graf\bin\Debug\graf.exe.config
-C:\Users\KamyK\Documents\GitHub\gui\graf\graf\obj\Debug\graf.exe
-C:\Users\KamyK\Documents\GitHub\gui\graf\graf\obj\Debug\graf.pdb
-C:\Users\KamyK\Documents\GitHub\gui\graf\graf\bin\Debug\graf.exe
-C:\Users\KamyK\Documents\GitHub\gui\graf\graf\bin\Debug\graf.pdb
-C:\Users\KamyK\Documents\GitHub\gui\graf\graf\obj\Debug\graf.csprojResolveAssemblyReference.cache
-C:\Users\KamyK\Documents\GitHub\gui\graf\graf\obj\Debug\graf.Form1.resources
-C:\Users\KamyK\Documents\GitHub\gui\graf\graf\obj\Debug\graf.Properties.Resources.resources
-C:\Users\KamyK\Documents\GitHub\gui\graf\graf\obj\Debug\graf.csproj.GenerateResource.Cache
 D:\Dysk Google\VI semestr\Projekt Zespołowy\gui\graf\graf\bin\Debug\graf.exe
 D:\Dysk Google\VI semestr\Projekt Zespołowy\gui\graf\graf\bin\Debug\graf.pdb
 D:\Dysk Google\VI semestr\Projekt Zespołowy\gui\graf\graf\obj\Debug\graf.csprojResolveAssemblyReference.cache
 D:\Dysk Google\VI semestr\Projekt Zespołowy\gui\graf\graf\obj\Debug\graf.Form1.resources
 D:\Dysk Google\VI semestr\Projekt Zespołowy\gui\graf\graf\obj\Debug\graf.Properties.Resources.resources
 D:\Dysk Google\VI semestr\Projekt Zespołowy\gui\graf\graf\obj\Debug\graf.csproj.GenerateResource.Cache
-C:\Users\KamyK\Documents\GitHub\gui\graf\graf\bin\Debug\tinyos-sdk.dll
-C:\Users\KamyK\Documents\GitHub\gui\graf\graf\obj\Debug\graf.Form2.resources
 D:\Dysk Google\VI semestr\Projekt Zespołowy\gui\graf\graf\obj\Debug\graf.Form2.resources
+C:\Users\KamyK\Documents\GitHub\gui\graf\graf\bin\Debug\graf.exe.config
+C:\Users\KamyK\Documents\GitHub\gui\graf\graf\bin\Debug\graf.exe
+C:\Users\KamyK\Documents\GitHub\gui\graf\graf\bin\Debug\graf.pdb
+C:\Users\KamyK\Documents\GitHub\gui\graf\graf\bin\Debug\tinyos-sdk.dll
+C:\Users\KamyK\Documents\GitHub\gui\graf\graf\obj\Debug\graf.Form1.resources
+C:\Users\KamyK\Documents\GitHub\gui\graf\graf\obj\Debug\graf.Form2.resources
+C:\Users\KamyK\Documents\GitHub\gui\graf\graf\obj\Debug\graf.Properties.Resources.resources
+C:\Users\KamyK\Documents\GitHub\gui\graf\graf\obj\Debug\graf.csproj.GenerateResource.Cache
+C:\Users\KamyK\Documents\GitHub\gui\graf\graf\obj\Debug\graf.exe
+C:\Users\KamyK\Documents\GitHub\gui\graf\graf\obj\Debug\graf.pdb
