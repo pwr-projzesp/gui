@@ -44,14 +44,14 @@ namespace graf
     {
         MoteIF mote;            // obiekt klasy MoteIF odpowiedzialnej za niskopoziomowe odbieranie danych z określonego portu
         string motecom;         // łańcuch znaków zawierający numer portu i szybkość transmisji w forie "serial@numerportu:szybkosctransmisji" np. "serial@com4:57600"
-        Form2 form2;            // zmienna zawierająca formularz do którego zwracamy wszystkie odebrane dane
+        Form1 form1;            // zmienna zawierająca formularz do którego zwracamy wszystkie odebrane dane
         Boolean active;         // zmienna zawierająca dane czy jest aktywny jakikolwiek nasłuch
 
         // Konstruktor przyjmujący jako parametry msg - zawierajaca numer portu i szybkosc transmisji,
         // oraz formularz do którego ma zwrócić odebrane dane
-        public Listener(string msg, Form2 form)
+        public Listener(string msg, Form1 form)
         {
-            form2 = form;
+            form1 = form;
 
             motecom = msg;
             try
@@ -60,11 +60,12 @@ namespace graf
             }
             catch (Exception e)
             {
-                form2.add_Msg(e.Message);
+                form1.add_Msg(e.Message);
                 return;
             }
             active = true;
-            form2.add_Msg("Listening on " + motecom + " (^C or 'exit' returns to prompt)");
+            form1.add_Msg("Listening on " + motecom + " (^C or 'exit' returns to prompt)");
+
             mote.onMessageArrived += newMsgHandler;
         }
 
@@ -74,8 +75,8 @@ namespace graf
             if (active == true)
             {
                 active = false;
-                form2.add_Msg("Closing listener on " + motecom + "...");
-                mote.onMessageArrived -= newMsgHandler;
+                form1.add_Msg("Closing listener on " + motecom + "...");
+                //mote.onMessageArrived -= newMsgHandler;
                 mote.Close();
             }
         }
@@ -83,7 +84,20 @@ namespace graf
         // Metoda przekazująca do formularza dane odebrane od stacji bazowej
         private void newMsgHandler(Object sender, EventArgSerialMessage e)
         {
-            form2.add_Msg(BitConverter.ToString(e.msg.GetMessageBytes(), 0));
+            String msg = BitConverter.ToString(e.msg.GetMessageBytes(), 0);
+            string newmsg = "";
+            string[] msgSplit = msg.Split('-');
+            for (int i = 8; i < msgSplit.Count(); i++)
+            {
+                int value = Convert.ToInt32(msgSplit[i], 16);
+                if (value >= 65 && value <= 90 || value == 32 || value == 95 || value >= 97 && value <= 122 || value == 125 || value == 126)
+                {
+                    char charValue = (char)value;
+                    newmsg += charValue;
+                }
+            }
+
+            form1.add_Msg(newmsg);
         }
 
     }

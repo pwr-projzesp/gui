@@ -15,25 +15,28 @@ namespace graf
         private Point loc = new Point();                    // zmienna przechowujaca polozenie urzadzenia
         private List<int> connDev = new List<int>();        // kolekcja przechowujaca ID urzadzen, z ktorymi dane urzadzenie ma polaczenie     
         private static int range;                           // zmienna statyczna przechowujaca aktualny zasieg urzadzen
-
+        private float voltage;
 
 // Constructors
         public Node(int ID, Point loc)
         {
             this.ID = ID;
             this.loc = loc;
+            this.voltage = (float)(0.1);
         }
         public Node(int ID, Point loc, List<int> connDev)
         {
             this.ID = ID;
             this.loc = loc;
             setConnDev(connDev);
+            this.voltage = (float)(0.1);
         }
         public Node(int ID, Point loc, bool isBase)
         {
             this.ID = ID;
             this.loc = loc;
             this.isBase = isBase;
+            this.voltage = (float)(0.1);
         }
         public Node(int ID, Point loc, bool isBase, List<int> connDev)
         {
@@ -41,6 +44,7 @@ namespace graf
             this.loc = loc;
             this.isBase = isBase;
             setConnDev(connDev);
+            this.voltage = (float)(0.1);
         }
 
 // Getters
@@ -63,6 +67,10 @@ namespace graf
         public List<int>    getConnDev()
         {
             return connDev;
+        }
+        public float        getVoltage()
+        {
+            return voltage;
         }
 
 
@@ -91,6 +99,10 @@ namespace graf
         public void clearConnDev()
         {
             this.connDev.Clear();
+        }
+        public void setVoltage(float voltage)
+        {
+            this.voltage = voltage;
         }
 
     }

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using tinyos.sdk;
 
 namespace graf
 {
@@ -18,7 +19,7 @@ namespace graf
         List<Node> nodes = new List<Node>();                    // kolekcja zawierajace wszystkie urzadzenia
         private PictureBox picture;                             // pojedynczy picturebox reprezentujacy fizyczny obiekt
         private List<PictureBox> pictureBoxes = new List<PictureBox>();     // kolekcja przechowujaca pictureboxy z wezlami
-
+        Listener listener;                              // nowy obiekt klasy Listener
 
 
 // Funckje rysujące
@@ -31,7 +32,7 @@ namespace graf
         private void drawBase(Point loc, int ID)
         {
             String nazwa = "    Base";
-            nazwa += ID;
+            //nazwa += ID;
             picture = new PictureBox();
             picture.Location = new System.Drawing.Point(loc.X, loc.Y);
             picture.Image = new Bitmap("base.png");
@@ -112,18 +113,20 @@ namespace graf
         private void drawNode(Point loc, int ID)
         {
             String nazwa = "    Node";
-            nazwa += ID;
+            nazwa += ID+1;
             picture = new PictureBox();
             picture.Location = new System.Drawing.Point(loc.X, loc.Y);
             picture.Image = new Bitmap("node.png");
             picture.Size = picture.Image.Size;
-
+            float volt = nodes[ID].getVoltage();
+            String voltage = volt + "V \n";
             picture.Paint += new PaintEventHandler((sender, e) =>
             {
                 e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
                 e.Graphics.DrawString(nazwa, Font, Brushes.Black, 0, 0);
+                groupBox4.CreateGraphics().DrawString(voltage, Font, Brushes.Green, loc.X + picture.Width + 2, loc.Y);
             });
- 
+
             picture.MouseDoubleClick += new MouseEventHandler((sender, e) => 
             {
                 Point loca = nodes[ID].getLoc();
@@ -338,14 +341,32 @@ namespace graf
             }
         }
 
-        // Metoda wywolywana po nacisnieciu przycisku "Pokaż ruch w sieci"
-        // wyświetla w nowym oknie dane odbierane przez port usb od stacji bazowej
-        private void button7_Click(object sender, EventArgs e)
+        // Metoda wywolywana po nacisnieciu przycisku "Start"
+        // rozpoczyna nasłuch na danym porcie szeregowym
+        private void button7_Click_1(object sender, EventArgs e)
         {
-            Form2 form2 = new Form2();
-            form2.Show();
+            string port = textBox2.Text;
+            string speed = textBox3.Text;
+            string msg = "serial@" + port.ToLower() + ":" + speed;
+            listener = new Listener(msg, this);
         }
 
+        // Metoda wywolywana po nacisnieciu przycisku "Stop"
+        // kończy nasłuch na danym porcie szeregowym
+        private void button8_Click(object sender, EventArgs e)
+        {
+            if (listener != null)
+                listener.stop();
+        }
+
+        // Metoda wywolywana po nacisnieciu przycisku "EXIT"
+        // zamyka główne okno programu
+        private void button9_Click(object sender, EventArgs e)
+        {
+            if (listener != null)
+                listener.stop();
+            this.Close();
+        }
 
 // Obługa zdarzeń
 // --------------------------------------------------------------------------------------------------
@@ -437,6 +458,52 @@ namespace graf
             }
         }
 
+        // Metody potrzebne do prawidłowego wyświetlania wiadomości otrzymanych w wyniku działania innego wątku
+        delegate void SetTextCallback(string text);
+        private const int CP_NOCLOSE_BUTTON = 0x200;
+
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                CreateParams myCp = base.CreateParams;
+                myCp.ClassStyle = myCp.ClassStyle| CP_NOCLOSE_BUTTON;
+                return myCp;
+            }
+        }
+        /*
+        private void SetText(string text)
+        {
+            // InvokeRequired required compares the thread ID of the
+            // calling thread to the thread ID of the creating thread.
+            // If these threads are different, it returns true.
+            if (this.textBox1.InvokeRequired)
+            {
+                SetTextCallback d = new SetTextCallback(SetText);
+                this.Invoke(d, new object[] { text });
+            }
+            else
+            {
+                this.textBox1.AppendText(text + "\r \n");
+            }
+        }
+        */
+        // Metoda dodaje tekst do tekstboxa
+        public void add_Msg(string text)
+        {
+            // InvokeRequired required compares the thread ID of the
+            // calling thread to the thread ID of the creating thread.
+            // If these threads are different, it returns true.
+            if (this.textBox1.InvokeRequired)
+            {
+                SetTextCallback d = new SetTextCallback(add_Msg);
+                this.Invoke(d, new object[] { text });
+            }
+            else
+            {
+                this.textBox1.AppendText(text + "\r \n");
+            }
+        }
 
      }
 }

@@ -52,7 +52,6 @@ C:\Users\KamyK\Documents\GitHub\gui\graf\graf\bin\Debug\graf.exe
 C:\Users\KamyK\Documents\GitHub\gui\graf\graf\bin\Debug\graf.pdb
 C:\Users\KamyK\Documents\GitHub\gui\graf\graf\bin\Debug\tinyos-sdk.dll
 C:\Users\KamyK\Documents\GitHub\gui\graf\graf\obj\Debug\graf.Form1.resources
-C:\Users\KamyK\Documents\GitHub\gui\graf\graf\obj\Debug\graf.Form2.resources
 C:\Users\KamyK\Documents\GitHub\gui\graf\graf\obj\Debug\graf.Properties.Resources.resources
 C:\Users\KamyK\Documents\GitHub\gui\graf\graf\obj\Debug\graf.csproj.GenerateResource.Cache
 C:\Users\KamyK\Documents\GitHub\gui\graf\graf\obj\Debug\graf.exe
