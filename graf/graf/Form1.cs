@@ -74,6 +74,7 @@ namespace graf
                 {
                     copyLocation();
                     connections();
+                    drawVoltage();
                 }
                 if (e.Button == MouseButtons.Right)
                 {
@@ -113,18 +114,15 @@ namespace graf
         private void drawNode(Point loc, int ID)
         {
             String nazwa = "    Node";
-            nazwa += ID+1;
+            nazwa += ID;
             picture = new PictureBox();
             picture.Location = new System.Drawing.Point(loc.X, loc.Y);
             picture.Image = new Bitmap("node.png");
             picture.Size = picture.Image.Size;
-            float volt = nodes[ID].getVoltage();
-            String voltage = volt + "V \n";
             picture.Paint += new PaintEventHandler((sender, e) =>
             {
                 e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAlias;
                 e.Graphics.DrawString(nazwa, Font, Brushes.Black, 0, 0);
-                groupBox4.CreateGraphics().DrawString(voltage, Font, Brushes.Green, loc.X + picture.Width + 2, loc.Y);
             });
 
             picture.MouseDoubleClick += new MouseEventHandler((sender, e) => 
@@ -132,8 +130,10 @@ namespace graf
                 Point loca = nodes[ID].getLoc();
                 List<int> nb = nodes[ID].getConnDev();
                 string nbhood = string.Join(", ", nb);
+                float volt = nodes[ID].getVoltage();
+                String voltage = volt + "V \n";
 
-                info = "ID: " + ID + " \nPolozenie: " + pictureBoxes[ID].Location.X + " " + pictureBoxes[ID].Location.Y + " \nSasiedzi: " + nbhood;
+                info = "ID: " + ID + "\nNapięcie: " + voltage + "\nPolozenie: " + pictureBoxes[ID].Location.X + " " + pictureBoxes[ID].Location.Y + " \nSasiedzi: " + nbhood;
                 MessageBox.Show(info, nazwa);           
             });
 
@@ -157,6 +157,7 @@ namespace graf
                 {
                     copyLocation();
                     connections();
+                    drawVoltage();
                 }
                 if (e.Button == MouseButtons.Right)
                 {
@@ -164,7 +165,6 @@ namespace graf
                     drawConn(ID);
                 }
             });
-            
             picture.Cursor = Cursors.Hand;
             groupBox4.Controls.Add(picture);
             pictureBoxes.Add(picture);
@@ -206,7 +206,17 @@ namespace graf
             groupBox4.CreateGraphics().DrawEllipse(new Pen(Brushes.Green, 2), pictureBoxes[ID].Location.X - Node.getRange(), pictureBoxes[ID].Location.Y - Node.getRange(), 2 * Node.getRange(), 2 * Node.getRange());
         }
 
-
+        // Metoda sluzaca do narysowania napięcia poszczególnych stacji roboczych
+        private void drawVoltage()
+        {
+            for (int ID = 0; ID < pictureBoxes.Count(); ID++)
+            {
+                float volt = nodes[ID].getVoltage();
+                Point loc = new Point();
+                loc = pictureBoxes[ID].Location;
+                groupBox4.CreateGraphics().DrawString(volt.ToString() + " V", Font, Brushes.Green, loc.X + pictureBoxes[ID].Width + 2, loc.Y);
+            }
+        }
 
 // Przyciski
 // --------------------------------------------------------------------------------------------------
@@ -241,6 +251,7 @@ namespace graf
             index = nodes.Count;
             copyLocation();
             connections();
+            drawVoltage();
         }
 
         // Metoda wywolywana po nacisnieciu przycisku "Sprawdz polaczenia"
@@ -457,7 +468,7 @@ namespace graf
                 nodes[i].setConnDev(neighbours);
             }
         }
-
+        
         // Metody potrzebne do prawidłowego wyświetlania wiadomości otrzymanych w wyniku działania innego wątku
         delegate void SetTextCallback(string text);
         private const int CP_NOCLOSE_BUTTON = 0x200;
@@ -471,23 +482,7 @@ namespace graf
                 return myCp;
             }
         }
-        /*
-        private void SetText(string text)
-        {
-            // InvokeRequired required compares the thread ID of the
-            // calling thread to the thread ID of the creating thread.
-            // If these threads are different, it returns true.
-            if (this.textBox1.InvokeRequired)
-            {
-                SetTextCallback d = new SetTextCallback(SetText);
-                this.Invoke(d, new object[] { text });
-            }
-            else
-            {
-                this.textBox1.AppendText(text + "\r \n");
-            }
-        }
-        */
+        
         // Metoda dodaje tekst do tekstboxa
         public void add_Msg(string text)
         {
