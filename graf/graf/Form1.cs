@@ -19,6 +19,8 @@ namespace graf
         List<Node> nodes = new List<Node>();                    // kolekcja zawierajace wszystkie urzadzenia
         private PictureBox picture;                             // pojedynczy picturebox reprezentujacy fizyczny obiekt
         private List<PictureBox> pictureBoxes = new List<PictureBox>();     // kolekcja przechowujaca pictureboxy z wezlami
+        public List<route> routing_table;
+     
         Listener listener;                              // nowy obiekt klasy Listener
 
 
@@ -498,6 +500,10 @@ namespace graf
             {
                 this.textBox1.AppendText(text + "\r \n");
             }
+        }
+        public void setVoltage(int i, float v) 
+        {
+            this.nodes[i].setVoltage(v);
         }
 
      }

@@ -85,6 +85,7 @@ namespace graf
         private void newMsgHandler(Object sender, EventArgSerialMessage e)
         {
             String msg = BitConverter.ToString(e.msg.GetMessageBytes(), 0);
+            String route = "";
             string newmsg = "";
             string[] msgSplit = msg.Split('-');
             for (int i = 8; i < msgSplit.Count(); i++)
@@ -96,9 +97,49 @@ namespace graf
                     newmsg += charValue;
                 }
             }
-
+            for (int i = 23; i < msg.Length; i++)
+                route += msg[i];
+            routing(route);
             form1.add_Msg(newmsg);
         }
+        private void routing(String msg)
+        {
 
+            string[] msgSplit = msg.Split('-');
+            int ID_MSG = Convert.ToInt32(msgSplit[0], 16);
+            if (ID_MSG == 1)
+            {
+                int ID_ROUTE = Convert.ToInt32(msgSplit[1], 16);
+                int ID_MOTE = Convert.ToInt32(msgSplit[2], 16);
+                if (form1.routing_table.Exists(x => x.id == ID_ROUTE))
+                {
+                    Console.WriteLine("znalazł");
+                    int index = form1.routing_table.FindIndex(a => a.id == ID_ROUTE);
+                    if (ID_MOTE > 0)
+                        form1.routing_table[index].motes.Add(ID_MOTE);
+                }
+                else
+                    Console.WriteLine("nie znalazł");
+                for (int i = 0; i < form1.routing_table.Count; i++)
+                {
+                    Console.Write("Trasa nr");
+                    Console.WriteLine(form1.routing_table[i].id);
+                    for (int j = 0; j < form1.routing_table[i].motes.Count; j++)
+                        Console.WriteLine(form1.routing_table[i].motes[j]);
+
+                }
+            }
+            else if (ID_MSG == 2)
+            {
+                int ID_MOTE = Convert.ToInt32(msgSplit[1], 16);
+                int number = Convert.ToInt32(msgSplit[2], 16);
+                //msgSplit[3] to kropka
+                int fraction = Convert.ToInt32(msgSplit[4], 16);
+                float voltage = number + fraction / 10;
+                form1.nodes
+            }
+            Console.ReadLine();
+
+        }
     }
 }
