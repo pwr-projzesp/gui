@@ -13,7 +13,8 @@ namespace graf
         private bool isBase = false;                        // zmienna przechowujaca informacje o typie urzadzenia (true - stacja bazowa, false - stacja robocza)
         private int ID;                                     // zmienna przechowujaca ID urzadzenia
         private Point loc = new Point();                    // zmienna przechowujaca polozenie urzadzenia
-        private List<int> connDev = new List<int>();        // kolekcja przechowujaca ID urzadzen, z ktorymi dane urzadzenie ma polaczenie     
+        private List<int> connDev = new List<int>();        // kolekcja przechowujaca ID urzadzen, z ktorymi dane urzadzenie ma polaczenie
+        private List<int> connBase = new List<int>();       // kolekcja przechowujaca ID urzadzen, przez ktore stacja bazowa wysyla kolejno pakiet do danej stacji docelowej
         private static int range;                           // zmienna statyczna przechowujaca aktualny zasieg urzadzen
         private float voltage;
 
@@ -37,6 +38,12 @@ namespace graf
             this.loc = loc;
             this.isBase = isBase;
             this.voltage = (float)(0.1);
+            if (ID == 5)
+            {
+                connBase.Add(1);
+                connBase.Add(3);
+                connBase.Add(5);
+            }
         }
         public Node(int ID, Point loc, bool isBase, List<int> connDev)
         {
@@ -67,6 +74,10 @@ namespace graf
         public List<int>    getConnDev()
         {
             return connDev;
+        }
+        public List<int>    getConnBase()
+        {
+            return connBase;
         }
         public float        getVoltage()
         {
@@ -99,6 +110,15 @@ namespace graf
         public void clearConnDev()
         {
             this.connDev.Clear();
+        }
+        public void setConnBase(List<int> connBase)
+        {
+            for (int i = 0; i < connBase.Count(); i++)
+                this.connBase.Add(connBase[i]);
+        }
+        public void clearConnBase()
+        {
+            this.connBase.Clear();
         }
         public void setVoltage(float voltage)
         {

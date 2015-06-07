@@ -22,7 +22,7 @@ namespace graf
         public List<route> routing_table;
      
         Listener listener;                              // nowy obiekt klasy Listener
-
+        private int baseID;
 
 // Funckje rysujące
 // --------------------------------------------------------------------------------------------------
@@ -135,7 +135,7 @@ namespace graf
                 float volt = nodes[ID].getVoltage();
                 String voltage = volt + "V \n";
 
-                info = "ID: " + ID + "\nNapięcie: " + voltage + "\nPolozenie: " + pictureBoxes[ID].Location.X + " " + pictureBoxes[ID].Location.Y + " \nSasiedzi: " + nbhood;
+                info = "ID: " + nodes[ID].getID() + "\nNapięcie: " + voltage + "\nPolozenie: " + pictureBoxes[ID].Location.X + " " + pictureBoxes[ID].Location.Y + " \nSasiedzi: " + nbhood;
                 MessageBox.Show(info, nazwa);           
             });
 
@@ -165,6 +165,8 @@ namespace graf
                 {
                     drawRange(ID);
                     drawConn(ID);
+                    if (findBase() == 0);
+                        drawConnBase(ID);
                 }
             });
             picture.Cursor = Cursors.Hand;
@@ -219,9 +221,32 @@ namespace graf
                 groupBox4.CreateGraphics().DrawString(volt.ToString() + " V", Font, Brushes.Green, loc.X + pictureBoxes[ID].Width + 2, loc.Y);
             }
         }
+        
+        // Metoda sluzaca do narysowania trasy pakietu od stacji bazowej do stacji o podanym ID
+        private void drawConnBase(int ID)
+        {
+            List<int> connBase = new List<int>(); 
+            connBase = nodes[ID].getConnBase();
+            for (int i = 0; i < connBase.Count(); i++)
+            {
+                if (i != 0)
+                {
+                    Point begin = nodes[connBase[i - 1]].getLoc();
+                    Point end = nodes[connBase[i]].getLoc();
+                    drawLine(begin, end, 'r');
+                }
+                else
+                {
+                    Point begin = nodes[0].getLoc();
+                    Point end = nodes[connBase[i]].getLoc();
+                    drawLine(begin, end, 'r');
+                }
+            }
+        }
 
-// Przyciski
-// --------------------------------------------------------------------------------------------------
+
+        // Przyciski
+        // --------------------------------------------------------------------------------------------------
 
         int index = 0;
 
@@ -230,8 +255,36 @@ namespace graf
         private void button1_Click(object sender, EventArgs e)
         {
             loc = new Point((int)numericUpDown1.Value, (int)numericUpDown2.Value);
-            Node station = new Node(nodes.Count(), loc, checkType.Checked);
-            nodes.Add(station);
+            Node station;
+
+            if (checkType.Checked)
+            {
+                station = new Node(0, loc, checkType.Checked);
+                nodes.Insert(0, station);
+            }
+            else if (nodes.Count() > 0 && nodes[0].getID() == 0)
+            {
+                if (nodes.Count() == 0)
+                    station = new Node(1, loc, checkType.Checked);
+                else
+                    station = new Node(nodes.Count(), loc, checkType.Checked);
+
+                nodes.Add(station);
+            }
+            else if (nodes.Count() > 0)
+            {
+                if (nodes.Count() == 0)
+                    station = new Node(1, loc, checkType.Checked);
+                else
+                    station = new Node(nodes.Count() + 1, loc, checkType.Checked);
+
+                nodes.Add(station);
+            }
+            else
+            {
+                station = new Node(1, loc, checkType.Checked);
+                nodes.Add(station);
+            }
         }
 
         // Metoda wywolywana po nacisnieciu przycisku "Rysuj"
@@ -381,6 +434,21 @@ namespace graf
             this.Close();
         }
 
+        // Metoda wywolywana po nacisnieciu przycisku "RESET"
+        // resetuje usuwa istniejaca topologie
+        private void button10_Click(object sender, EventArgs e)
+        {
+            index = 0;
+            for (int i = 0; i < pictureBoxes.Count(); i++)
+            {
+                pictureBoxes[i].Dispose();
+            }
+            nodes.Clear();
+            pictureBoxes.Clear();
+            groupBox4.Invalidate();
+        }
+
+
 // Obługa zdarzeń
 // --------------------------------------------------------------------------------------------------
 
@@ -415,7 +483,6 @@ namespace graf
         }
 
 
-
 // Funckje pomocnicze
 // --------------------------------------------------------------------------------------------------
 
@@ -436,7 +503,7 @@ namespace graf
             }
         }
 
-        // Metoda sluzaca do atomatycznej aktualizacji wartosci zasiegu
+        // Metoda sluzaca do automatycznej aktualizacji wartosci zasiegu
         private void numericUpDown3_ValueChanged(object sender, EventArgs e)
         {
             groupBox4.Invalidate();
@@ -505,6 +572,24 @@ namespace graf
         {
             this.nodes[i].setVoltage(v);
         }
+
+        // Metoda znajduje urządzenie które jest
+        public int findBase()
+        {
+            Node ourBase;
+            for (int i = 0; i < nodes.Count(); i++)
+            {
+                ourBase = nodes[i];
+                if (ourBase.getType())
+                {
+                    baseID = ourBase.getID();
+                    return 0;
+                }
+            }
+            baseID = -1;
+            return -1;
+        }
+
 
      }
 }
