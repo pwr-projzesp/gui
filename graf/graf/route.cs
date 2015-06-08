@@ -6,11 +6,17 @@ using System.Threading.Tasks;
 
 namespace graf
 {
-    class route
+    public class route
     {
 
         public int id { get; set; }
         public List<int> motes { get; set; }
+
+        public route(int ID)
+        {
+            this.id = ID;
+            motes = new List<int>();
+        }
 
         public override bool Equals(object obj)
         {

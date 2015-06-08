@@ -46,13 +46,16 @@ namespace graf
         string motecom;         // łańcuch znaków zawierający numer portu i szybkość transmisji w forie "serial@numerportu:szybkosctransmisji" np. "serial@com4:57600"
         Form1 form1;            // zmienna zawierająca formularz do którego zwracamy wszystkie odebrane dane
         Boolean active;         // zmienna zawierająca dane czy jest aktywny jakikolwiek nasłuch
-
+        int[] check;
+        int reset=0;
         // Konstruktor przyjmujący jako parametry msg - zawierajaca numer portu i szybkosc transmisji,
         // oraz formularz do którego ma zwrócić odebrane dane
         public Listener(string msg, Form1 form)
         {
             form1 = form;
-
+            check = new int[form1.nodes.Count()];
+            for (int i = 0; i < form1.nodes.Count(); i++)
+                check[i] = 0;
             motecom = msg;
             try
             {
@@ -91,15 +94,15 @@ namespace graf
             for (int i = 8; i < msgSplit.Count(); i++)
             {
                 int value = Convert.ToInt32(msgSplit[i], 16);
-                if (value >= 65 && value <= 90 || value == 32 || value == 95 || value >= 97 && value <= 122 || value == 125 || value == 126)
+                if (value >= 65 && value <= 90 || value == 32 || value == 95 || value >= 97 && value <= 122 || value == 125 || value == 126 || (value > 47 && value < 58) )
                 {
                     char charValue = (char)value;
                     newmsg += charValue;
                 }
             }
-            for (int i = 23; i < msg.Length; i++)
+            for (int i = 24; i < msg.Length; i++)
                 route += msg[i];
-            routing(route);
+              routing(route);
             form1.add_Msg(newmsg);
         }
         private void routing(String msg)
@@ -109,36 +112,51 @@ namespace graf
             int ID_MSG = Convert.ToInt32(msgSplit[0], 16);
             if (ID_MSG == 1)
             {
-                int ID_ROUTE = Convert.ToInt32(msgSplit[1], 16);
-                int ID_MOTE = Convert.ToInt32(msgSplit[2], 16);
+                if ((form1.routing_table.Count() == (form1.nodes.Count() - 1)) && (form1.nodes.Count() != 0))
+                {
+                    form1.routing_table.RemoveAt(0);
+                }
+
+                reset++;
+
+                if (reset == form1.nodes.Count())
+                {
+                    for (int j = 0; j < form1.routing_table.Count(); j++)
+                    {
+                        if (form1.routing_table[j].motes.Count > 0) 
+                        check[form1.routing_table[j].motes.Last()] = 1;
+                    }
+
+                    for (int j = 0; j < check.Count(); j++)
+                    {
+                        if (check[j] == 0)
+                        {
+                           form1.nodes[j].clearConnBase(); 
+                        }
+                        check[j] = 0;
+                    }
+                    reset = 0;
+                }
+                
+                int ID_ROUTE = Convert.ToInt32(msgSplit[1], 16) | (Convert.ToInt32(msgSplit[2], 16) << 8);
+                int ID_MOTE = (Convert.ToInt32(msgSplit[3], 16) | (Convert.ToInt32(msgSplit[4], 16) << 8)) - 1;
+
+                if (!form1.routing_table.Exists(x => x.id == ID_ROUTE))
+                {
+                    route rote = new route(ID_ROUTE);
+                    form1.routing_table.Add(rote);
+                }
+
                 if (form1.routing_table.Exists(x => x.id == ID_ROUTE))
                 {
-                    Console.WriteLine("znalazł");
+                    //Console.WriteLine("znalazł");
                     int index = form1.routing_table.FindIndex(a => a.id == ID_ROUTE);
                     if (ID_MOTE > 0)
                         form1.routing_table[index].motes.Add(ID_MOTE);
                 }
-                else
-                    Console.WriteLine("nie znalazł");
-                for (int i = 0; i < form1.routing_table.Count; i++)
-                {
-                    Console.Write("Trasa nr");
-                    Console.WriteLine(form1.routing_table[i].id);
-                    for (int j = 0; j < form1.routing_table[i].motes.Count; j++)
-                        Console.WriteLine(form1.routing_table[i].motes[j]);
 
-                }
             }
-            else if (ID_MSG == 2)
-            {
-                int ID_MOTE = Convert.ToInt32(msgSplit[1], 16);
-                int number = Convert.ToInt32(msgSplit[2], 16);
-                //msgSplit[3] to kropka
-                int fraction = Convert.ToInt32(msgSplit[4], 16);
-                float voltage = number + fraction / 10;
-                form1.nodes
-            }
-            Console.ReadLine();
+            //Console.ReadLine();
 
         }
     }

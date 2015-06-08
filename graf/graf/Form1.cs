@@ -6,6 +6,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using tinyos.sdk;
@@ -14,12 +15,14 @@ namespace graf
 {
     public partial class Form1 : Form
     {
-        int range = 0;                                          // zmienna przechowujaca wartosc zasiegu
+        int range = 0;
+        static int redraw = 0;                               // zmienna przechowujaca wartosc zasiegu
+        static bool redr = false;
         Point loc = new Point();                                // zmienna sluzaca do przechowywania polozenia ( (0;0) - gorny prawy rog okna aplikacji)
-        List<Node> nodes = new List<Node>();                    // kolekcja zawierajace wszystkie urzadzenia
+        public List<Node> nodes = new List<Node>();             // kolekcja zawierajace wszystkie urzadzenia
         private PictureBox picture;                             // pojedynczy picturebox reprezentujacy fizyczny obiekt
         private List<PictureBox> pictureBoxes = new List<PictureBox>();     // kolekcja przechowujaca pictureboxy z wezlami
-        public List<route> routing_table;
+        public List<route> routing_table = new List<route>();
      
         Listener listener;                              // nowy obiekt klasy Listener
         private int baseID;
@@ -131,11 +134,13 @@ namespace graf
             {
                 Point loca = nodes[ID].getLoc();
                 List<int> nb = nodes[ID].getConnDev();
+                List<int> rote = nodes[ID].getConnBase();
                 string nbhood = string.Join(", ", nb);
+                string rotehood = string.Join(", ", rote);
                 float volt = nodes[ID].getVoltage();
                 String voltage = volt + "V \n";
 
-                info = "ID: " + nodes[ID].getID() + "\nNapięcie: " + voltage + "\nPolozenie: " + pictureBoxes[ID].Location.X + " " + pictureBoxes[ID].Location.Y + " \nSasiedzi: " + nbhood;
+                info = "ID: " + nodes[ID].getID() + "\nNapięcie: " + voltage + "\nPolozenie: " + pictureBoxes[ID].Location.X + " " + pictureBoxes[ID].Location.Y + " \nSasiedzi: " + nbhood + " \nRoute: " + rotehood;
                 MessageBox.Show(info, nazwa);           
             });
 
@@ -159,14 +164,17 @@ namespace graf
                 {
                     copyLocation();
                     connections();
-                    drawVoltage();
+                   // drawVoltage();
                 }
                 if (e.Button == MouseButtons.Right)
                 {
                     drawRange(ID);
                     drawConn(ID);
-                    if (findBase() == 0);
+                    if (findBase() == 0)
+                    {
                         drawConnBase(ID);
+                        redraw = ID;
+                    }
                 }
             });
             picture.Cursor = Cursors.Hand;
@@ -225,21 +233,44 @@ namespace graf
         // Metoda sluzaca do narysowania trasy pakietu od stacji bazowej do stacji o podanym ID
         private void drawConnBase(int ID)
         {
-            List<int> connBase = new List<int>(); 
-            connBase = nodes[ID].getConnBase();
-            for (int i = 0; i < connBase.Count(); i++)
+            int t;
+
+            if (routing_table.Count > 0)
             {
-                if (i != 0)
+                for (int i = 0; i < routing_table.Count(); i++)
                 {
-                    Point begin = nodes[connBase[i - 1]].getLoc();
-                    Point end = nodes[connBase[i]].getLoc();
-                    drawLine(begin, end, 'r');
+                    if (routing_table[i].motes.Count() != 0)
+                    {
+                        t = routing_table[i].motes.Last();
+
+                        for (int j = 0; j < nodes.Count(); j++)
+                        {
+                            if (nodes[j].getID() == t)
+                            {
+                                nodes[j].clearConnBase();
+                                nodes[j].setConnBase(routing_table[i].motes);
+                            }
+                        }
+                    }
                 }
-                else
+
+                List<int> connBase = new List<int>();
+                connBase = nodes[ID].getConnBase();
+                for (int i = 0; i < connBase.Count(); i++)
                 {
-                    Point begin = nodes[0].getLoc();
-                    Point end = nodes[connBase[i]].getLoc();
-                    drawLine(begin, end, 'r');
+                    if (i != 0)
+                    {
+                        Point begin = nodes[connBase[i - 1]].getLoc();
+                        Point end = nodes[connBase[i]].getLoc();
+                        drawLine(begin, end, 'r');
+                    }
+                    else
+                    {
+                        Point begin = nodes[0].getLoc();
+                        Point end = nodes[connBase[i]].getLoc();
+                        drawLine(begin, end, 'r');
+                    }
+
                 }
             }
         }
@@ -438,11 +469,15 @@ namespace graf
         // resetuje usuwa istniejaca topologie
         private void button10_Click(object sender, EventArgs e)
         {
+            if (listener != null)
+                listener.stop();
+
             index = 0;
             for (int i = 0; i < pictureBoxes.Count(); i++)
             {
                 pictureBoxes[i].Dispose();
             }
+
             nodes.Clear();
             pictureBoxes.Clear();
             groupBox4.Invalidate();
@@ -478,6 +513,8 @@ namespace graf
 
         public Form1()
         {
+            Thread workerThread = new Thread(redrawing);
+            workerThread.Start();
             WindowState = FormWindowState.Maximized;
             InitializeComponent();
         }
@@ -588,6 +625,22 @@ namespace graf
             }
             baseID = -1;
             return -1;
+        }
+
+        private void button11_Click(object sender, EventArgs e)
+        {
+            redr = !redr;
+        }
+
+        public void redrawing()
+        {
+            while(true)
+            while(redr)
+            {
+                groupBox4.Invalidate();
+                drawConnBase(redraw);
+                Thread.Sleep(500);
+            } 
         }
 
 

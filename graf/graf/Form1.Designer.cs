@@ -56,6 +56,7 @@
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.button9 = new System.Windows.Forms.Button();
             this.button10 = new System.Windows.Forms.Button();
+            this.button11 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
@@ -158,9 +159,9 @@
             // button3
             // 
             this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button3.Location = new System.Drawing.Point(50, 74);
+            this.button3.Location = new System.Drawing.Point(28, 74);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(103, 37);
+            this.button3.Size = new System.Drawing.Size(125, 23);
             this.button3.TabIndex = 8;
             this.button3.Text = "Sprawdź połączenia";
             this.button3.UseVisualStyleBackColor = true;
@@ -194,9 +195,9 @@
             // button4
             // 
             this.button4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button4.Location = new System.Drawing.Point(50, 117);
+            this.button4.Location = new System.Drawing.Point(50, 103);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(103, 36);
+            this.button4.Size = new System.Drawing.Size(103, 23);
             this.button4.TabIndex = 11;
             this.button4.Text = "Wyczyść okno";
             this.button4.UseVisualStyleBackColor = true;
@@ -256,10 +257,11 @@
             // groupBox3
             // 
             this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox3.Controls.Add(this.button11);
+            this.groupBox3.Controls.Add(this.button4);
+            this.groupBox3.Controls.Add(this.button3);
             this.groupBox3.Controls.Add(this.label4);
             this.groupBox3.Controls.Add(this.button2);
-            this.groupBox3.Controls.Add(this.button3);
-            this.groupBox3.Controls.Add(this.button4);
             this.groupBox3.Controls.Add(this.numericUpDown3);
             this.groupBox3.Cursor = System.Windows.Forms.Cursors.Default;
             this.groupBox3.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -392,6 +394,16 @@
             this.button10.UseVisualStyleBackColor = true;
             this.button10.Click += new System.EventHandler(this.button10_Click);
             // 
+            // button11
+            // 
+            this.button11.Location = new System.Drawing.Point(50, 130);
+            this.button11.Name = "button11";
+            this.button11.Size = new System.Drawing.Size(101, 23);
+            this.button11.TabIndex = 23;
+            this.button11.Text = "Auto - redraw";
+            this.button11.UseVisualStyleBackColor = true;
+            this.button11.Click += new System.EventHandler(this.button11_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -454,6 +466,7 @@
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.Button button9;
         private System.Windows.Forms.Button button10;
+        private System.Windows.Forms.Button button11;
 
 
     }
